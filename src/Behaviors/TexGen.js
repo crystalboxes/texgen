@@ -1,20 +1,13 @@
-class DisplayableStruct {
+class Displayable {
+  params = {}
 }
 
-export class TexGen extends DisplayableStruct {
-  resolution = {
-    visible: true,
-    value: 1024
+export class TexGen extends Displayable {
+  params = {
+    resolution: { value: 1024, rangeMin: 0, rangeMax: 2048 },
+    colorize: false,
+    effects: []
   }
-  colorize = {
-    visible: true,
-    value: false
-  }
-  effects = {
-    visible: true,
-    value: []
-  }
-  blas = { mew: "" }
 
   onStart() {
   }
