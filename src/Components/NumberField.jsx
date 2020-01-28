@@ -29,15 +29,9 @@ export class NumberField extends FieldRepresentation {
         value={this.state.value}
         defaultValue={this.state.value}
         onChange={this.handleInputChange}
-        // marks={Object.fromEntries(
-        //   new Map(
-        //     [[this.options.rangeMin, this.options.rangeMin],
-        //     [this.options.rangeMax, this.options.rangeMax]]
-        //   )
-        // )}
       />
       <p className="slider-text">
-        {this.name} <span className="slider-value">{this.state.value}</span>
+        {this.labelName} <span className="slider-value">{this.state.value}</span>
       </p>
     </div>
   }

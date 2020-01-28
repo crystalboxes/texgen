@@ -79,6 +79,6 @@ export class DisplayableComponent extends Component {
   }
 
   render() {
-    return <div className={this.instance.className}>{/* this.getTitle() */}{this.getElements()}</div>
+    return <div className={this.instance.className}>{this.getElements()}</div>
   }
 }

@@ -4,13 +4,13 @@ import Script from '../core/Script.js'
 import Displayable from '../core/Displayable.js'
 let gr = Graphics
 
-export class Effect extends Displayable {
+export class ParamsBlock extends Displayable {
   viewSettings = {
     className: 'displayable-struct column'
   }
 }
 
-export class GridEffect extends Effect {
+export class GridEffect extends ParamsBlock {
   params = {
     seed: 0,
     xCount: 8,
@@ -23,7 +23,7 @@ export class GridEffect extends Effect {
   }
 }
 
-export class KdGridEffect extends Effect {
+export class KdGridEffect extends ParamsBlock {
   params = {
     optimize: false,
     quadSplitFactor: 1.0,
@@ -45,7 +45,7 @@ export class KdGridEffect extends Effect {
   }
 }
 
-export class RandomGridEffect extends Effect {
+export class RandomGridEffect extends ParamsBlock {
   params = {
     seed: { value: 1000, rangeMin: 123, rangeMax: 9999 },
     greebleCount: { value: 100, rangeMin: 1, rangeMax: 10000 },
@@ -61,20 +61,25 @@ export class RandomGridEffect extends Effect {
   }
 }
 
-export class Colorizer extends Effect {
+export class Colorizer extends Displayable {
   params = {
     show: false,
-    a:  Color.make(0,0,0),
-    b:  Color.make(255, 255, 255),
-    c:  Color.make(0,0,0),
-    d:  Color.make(255, 255, 255),
+    a: Color.make(0, 0, 0),
+    b: Color.make(255, 255, 255),
+    c: Color.make(0, 0, 0),
+    d: Color.make(255, 255, 255),
+  }
+}
+export class MainParams extends ParamsBlock {
+  params = {
+    resolution: { value: 1024, rangeMin: 0, rangeMax: 2048 },
+    colorize: new Colorizer,
   }
 }
 
 export class TexGen extends Script {
   params = {
-    resolution: { value: 1024, rangeMin: 0, rangeMax: 2048 },
-    colorize: new Colorizer,
+    main: new MainParams,
     effects: [new KdGridEffect, new RandomGridEffect, new GridEffect]
   }
 
@@ -82,7 +87,7 @@ export class TexGen extends Script {
   }
 
   onUpdate() {
-    gr.drawRect(10, 10, 100, 100, {r:1.0, g: 0, b:0,a:1})
+    gr.drawRect(10, 10, 100, 100, { r: 1.0, g: 0, b: 0, a: 1 })
   }
 
   onDestroy() {

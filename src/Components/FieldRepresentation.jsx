@@ -11,9 +11,19 @@ export class FieldRepresentation extends Component {
   }
   render() {
     return <div className="param-field">
-      <span>{this.name}: {this.state.value}</span>
+      <span>{this.labelName} {this.state.value}</span>
     </div>
   }
+
+  get labelName() {
+    // https://stackoverflow.com/a/4149393
+    return this.name
+      // insert a space before all caps
+      .replace(/([A-Z])/g, ' $1')
+      // uppercase the first character
+      .replace(/^./, function (str) { return str.toUpperCase(); })
+  }
+
   handleInputChange(event) {
     let value = event
     if (typeof event === 'object') {
@@ -36,7 +46,7 @@ export class Toggle extends FieldRepresentation {
         checked={this.state.value}
         onChange={this.handleInputChange}
       />
-      <label htmlFor={this.name}>{this.name}</label>
+      <label htmlFor={this.name}>{this.labelName}</label>
     </div>
   }
 }
