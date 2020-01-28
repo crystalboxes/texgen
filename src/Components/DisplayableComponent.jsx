@@ -52,7 +52,8 @@ export class DisplayableComponent extends Component {
               return []
             }
             let i = 0
-            let elems = [<h3 key={i}>{v.name}</h3>]
+            const displayTitle = false
+            let elems = displayTitle ? [<h3 key={i}>{v.name}</h3>] : []
             for (let element of v.value) {
               elems.push(<DisplayableComponent key={keyId + i++} instance={element} />)
             }
@@ -78,6 +79,6 @@ export class DisplayableComponent extends Component {
   }
 
   render() {
-    return <div className={this.instance.getClassName()}>{this.getTitle()}{this.getElements()}</div>
+    return <div className={this.instance.className}>{/* this.getTitle() */}{this.getElements()}</div>
   }
 }
