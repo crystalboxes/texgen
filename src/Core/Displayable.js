@@ -4,7 +4,7 @@ export class Displayable {
     className: 'displayable-struct'
   }
 
-  getClassName() {
+  get className() {
     return this.viewSettings.className
   }
 }

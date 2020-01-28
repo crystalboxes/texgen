@@ -10,7 +10,7 @@ export class FieldRepresentation extends Component {
     this.handleInputChange = this.handleInputChange.bind(this);
   }
   render() {
-    return <div>
+    return <div className="param-field">
       <span>{this.name}: {this.state.value}</span>
     </div>
   }
@@ -29,14 +29,14 @@ export class FieldRepresentation extends Component {
 
 export class Toggle extends FieldRepresentation {
   render() {
-    return <div>
-      <span>{this.name}: {this.state.value}</span>
+    return <div className="param-field">
       <input
         name={this.name}
         type="checkbox"
         checked={this.state.value}
         onChange={this.handleInputChange}
       />
+      <label for={this.name}>{this.name}</label>
     </div>
   }
 }

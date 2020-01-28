@@ -12,7 +12,7 @@ export class AppComponent extends Component {
         width={this.instance.settings.width}
         height={this.instance.settings.height}
       />
-      <div id='app-parameters'>
+      <div id='app-parameters' className='noselect'>
         <DisplayableComponent instance={this.instance.script} />
       </div>
     </div>

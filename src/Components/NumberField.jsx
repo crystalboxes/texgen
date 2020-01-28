@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import {FieldRepresentation} from './FieldRepresentation.jsx'
+import { FieldRepresentation } from './FieldRepresentation.jsx'
 
 import Slider, { Range } from 'rc-slider';
 import 'rc-slider/assets/index.css';
@@ -20,9 +20,8 @@ export class NumberField extends FieldRepresentation {
     }
   }
   render() {
-    return <div>
-      <span>{this.name}: {this.state.value}</span>
-      <Slider   
+    return <div className="param-field">
+      <Slider
         name={this.name}
         min={this.options.rangeMin}
         max={this.options.rangeMax}
@@ -30,12 +29,16 @@ export class NumberField extends FieldRepresentation {
         value={this.state.value}
         defaultValue={this.state.value}
         onChange={this.handleInputChange}
+        // marks={Object.fromEntries(
+        //   new Map(
+        //     [[this.options.rangeMin, this.options.rangeMin],
+        //     [this.options.rangeMax, this.options.rangeMax]]
+        //   )
+        // )}
       />
-      {/* <input
-        type="range"
-        
-        
-      /> */}
+      <p className="slider-text">
+        {this.name} <span class="slider-value">{this.state.value}</span>
+      </p>
     </div>
   }
 }

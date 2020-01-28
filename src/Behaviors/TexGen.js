@@ -4,7 +4,13 @@ import Script from '../core/Script.js'
 import Displayable from '../core/Displayable.js'
 let gr = Graphics
 
-export class GridEffect extends Displayable {
+export class Effect extends Displayable {
+  viewSettings = {
+    className: 'displayable-struct column'
+  }
+}
+
+export class GridEffect extends Effect {
   params = {
     seed: 0,
     xCount: 8,
@@ -17,7 +23,7 @@ export class GridEffect extends Displayable {
   }
 }
 
-export class KdGridEffect extends Displayable {
+export class KdGridEffect extends Effect {
   params = {
     optimize: false,
     quadSplitFactor: 1.0,
@@ -39,7 +45,7 @@ export class KdGridEffect extends Displayable {
   }
 }
 
-export class RandomGridEffect extends Displayable {
+export class RandomGridEffect extends Effect {
   params = {
     seed: { value: 1000, rangeMin: 123, rangeMax: 9999 },
     greebleCount: { value: 100, rangeMin: 1, rangeMax: 10000 },
@@ -55,7 +61,7 @@ export class RandomGridEffect extends Displayable {
   }
 }
 
-export class Colorizer extends Displayable {
+export class Colorizer extends Effect {
   params = {
     show: false,
     a:  Color.make(0,0,0),
