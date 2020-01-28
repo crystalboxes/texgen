@@ -40,12 +40,18 @@ export class DisplayableComponent extends Component {
     return this.getParsedParameters()
       .map(v => {
         let keyId = v.name + "_" + Math.random() * (new Date).getMilliseconds() 
+        let attribs = {
+          name: v.name,
+          key: keyId,
+          default: v.value,
+          data: v.data
+        }
         switch (v.valueType) {
           case 'number':
             // data contains stuff like bounds etc.
-            return <NumberField name={v.name} key={keyId} default={v.value} data={v.data} />
+            return React.createElement(NumberField, attribs)
           case 'boolean':
-            return <Toggle name={v.name} key={keyId} default={v.value} />
+            return React.createElement(Toggle, attribs)
           case 'array':
             // It's required that incoming structs are derived from Displayable
             if (v.value.length == 0) {
@@ -53,19 +59,22 @@ export class DisplayableComponent extends Component {
             }
             let i = 0
             const displayTitle = false
-            let elems = displayTitle ? [<h3 key={i}>{v.name}</h3>] : []
+            let elems = displayTitle ? [React.createElement('h3', {key: i}, [v.name])] : []
             for (let element of v.value) {
-              elems.push(<DisplayableComponent key={keyId + i++} instance={element} />)
+              elems.push(React.createElement(DisplayableComponent, {
+                key: keyId + i++,
+                instance: element
+              }))
             }
             return elems
           case 'object':
             if ('display' in v.value) {
               return React.createElement(v.value.display, { key: keyId, title: v.name, instance: v.value })
             } else {
-              return <DisplayableComponent key={keyId} title={v.name} instance={v.value} />
+              return React.createElement(DisplayableComponent, {key: keyId, title: v.name, instance: v.value})
             }
           default:
-            return <FieldRepresentation name={v.name} key={keyId} default={v.value} />
+            return React.createElement(FieldRepresentation, attribs)
         }
       })
   }
