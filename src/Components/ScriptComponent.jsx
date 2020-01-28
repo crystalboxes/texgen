@@ -5,41 +5,29 @@ import Draggable, { DraggableCore } from 'react-draggable'; // Both at the same 
 export class ScriptComponent extends DisplayableComponent {
   constructor(props) {
     super(props)
-    this.state = {
-      activeDrags: 0,
-      deltaPosition: {
-        x: 0, y: 0
-      },
-      controlledPosition: {
-        x: -400, y: 200
-      }
-    }
+    this.state = { open: true }
+    this.handleClick = this.handleClick.bind(this);
   }
 
-  handleDrag = (e, ui) => {
-    const { x, y } = this.state.deltaPosition;
-    this.setState({
-      deltaPosition: {
-        x: x + ui.deltaX,
-        y: y + ui.deltaY,
-      }
-    });
-  };
+  handleClick() {
+    this.state.open = !this.state.open
+    this.setState(this.state);
+  }
 
-  onStart = () => {
-    this.setState({ activeDrags: ++this.state.activeDrags });
-  };
-
-  onStop = () => {
-    this.setState({ activeDrags: --this.state.activeDrags });
-  };
+  getParamsContainer() {
+    return this.state.open ? <div className='paramsContainer'>{this.getElements()}</div> : ''
+  }
 
   render() {
-    const dragHandlers = { onStart: this.onStart, onStop: this.onStop }
-    return <Draggable handle="strong" {...dragHandlers}>
+    return <Draggable handle="strong">
       <div className={this.instance.className}>
-        <strong className="cursor"><div>Drag here</div></strong>
-        <div className='paramsContainer'>{this.getElements()}</div>
+        <strong className="cursor">
+          <div>
+            <button className="collapse-button" onClick={this.handleClick}>{this.state.open ? "[-]" : "[+]"}</button>
+            Parameters
+          </div>
+        </strong>
+        {this.getParamsContainer()}
       </div>
     </Draggable>
 

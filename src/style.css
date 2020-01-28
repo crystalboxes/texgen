@@ -11,18 +11,37 @@ body, p, h3 {
   color: white;
 }
 
+input[type="checkbox"] {
+  padding:0;
+  margin: 0 2px 0 0;
+  vertical-align: middle;
+}
+
 #app-display {
   margin: 0 auto;
   display: block;
 }
 
-/* #app-parameters {
-} */
+.collapse-button {
+  background: none;
+	color: inherit;
+	border: none;
+	padding: 0;
+	font: inherit;
+	/* cursor: pointer; */
+  outline: inherit;
+  vertical-align: middle;
+
+  
+  font-family: monospace;
+}
+
 .script-parameters {
-  background-color: rgba(0, 0, 0, 0.1) !important;
+  background-color: rgba(51, 92, 145, 0.6) !important;
   left:0;
+  min-width: 500px;
+  padding: 0 0 2px 2px;
   position: fixed;
-  padding-bottom: 10px;
   top:0;
 }
 .script-parameters > .paramsContainer {
@@ -31,6 +50,7 @@ body, p, h3 {
 
 .column { 
   float: left;
+  padding-bottom: 10px;
   padding-right: 8px;
   width: 145px;
 }
