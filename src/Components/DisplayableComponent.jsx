@@ -1,9 +1,9 @@
 import React, { Component } from "react"
 import {
   FieldRepresentation,
-  NumberField,
   Toggle
 } from './FieldRepresentation.jsx'
+import {NumberField} from './NumberField.jsx'
 
 export class DisplayableComponent extends Component {
   constructor(props) {
@@ -78,6 +78,6 @@ export class DisplayableComponent extends Component {
   }
 
   render() {
-    return <div>{this.getTitle()}{this.getElements()}</div>
+    return <div className={this.instance.getClassName()}>{this.getTitle()}{this.getElements()}</div>
   }
 }
