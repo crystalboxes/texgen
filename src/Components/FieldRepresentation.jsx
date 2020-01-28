@@ -36,7 +36,7 @@ export class Toggle extends FieldRepresentation {
         checked={this.state.value}
         onChange={this.handleInputChange}
       />
-      <label for={this.name}>{this.name}</label>
+      <label htmlFor={this.name}>{this.name}</label>
     </div>
   }
 }

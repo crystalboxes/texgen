@@ -37,7 +37,7 @@ export class NumberField extends FieldRepresentation {
         // )}
       />
       <p className="slider-text">
-        {this.name} <span class="slider-value">{this.state.value}</span>
+        {this.name} <span className="slider-value">{this.state.value}</span>
       </p>
     </div>
   }

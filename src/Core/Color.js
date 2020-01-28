@@ -8,9 +8,9 @@ export class Color extends Displayable {
   static make(r, g, b) {
     let c = new Color
     c.params = {
-      r: { value: r | 0, rangeMin: 0, rangeMax: 255 },
-      g: { value: g | 0, rangeMin: 0, rangeMax: 255 },
-      b: { value: b | 0, rangeMin: 0, rangeMax: 255 }
+      r: { value: r | 0, rangeMin: 0, rangeMax: 255, step: 1},
+      g: { value: g | 0, rangeMin: 0, rangeMax: 255, step: 1},
+      b: { value: b | 0, rangeMin: 0, rangeMax: 255, step: 1}
     }
     return c
   }
