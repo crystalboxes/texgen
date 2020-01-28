@@ -1,12 +1,72 @@
-class Displayable {
-  params = {}
+import Displayable from '../Core/Displayable.js'
+import Color from '../Core/Color.js'
+
+export class GridEffect extends Displayable {
+  params = {
+    seed: 0,
+    xCount: 8,
+    yCount: 8,
+    countScaler: 1.0,
+    renderChance: 0.5,
+    spritePickChance: 0.5,
+    minDepth: 0.0,
+    maxDepth: 1.0
+  }
+}
+
+export class KdGridEffect extends Displayable {
+  params = {
+    optimize: false,
+    quadSplitFactor: 1.0,
+    seed: 0,
+    spriteChance: 0.5,
+    iterations: { value: 7, rangeMin: 1, rangeMax: 12, step: 1 },
+    renderChance: 1.0,
+    kdSplitChance: 1.0,
+    splitChance: 1.0,
+    noiseGlobalOffset: 0,
+    noiseModulation: 1.0,
+    blackAndWhite: false,
+    bwBias: 0.5,
+    drawCircles: false,
+    drawCirclesBias: 0.5,
+    circleRadiusSize: 1.0,
+    minDepth: 0,
+    maxDepth: 1.0
+  }
+}
+
+export class RandomGridEffect extends Displayable {
+  params = {
+    seed: { value: 1000, rangeMin: 123, rangeMax: 9999 },
+    greebleCount: { value: 100, rangeMin: 1, rangeMax: 10000 },
+    spriteChance: 1.0,
+    minDepth: 0,
+    maxDepth: 1.0,
+    minSize: 20,
+    maxSize: 200,
+    minScaleX: 0.1,
+    minScaleY: 0.1,
+    maxScaleX: { value: 1.5, rangeMax: 10.0, step: 0.1 },
+    maxScaleY: { value: 1.5, rangeMax: 10.0, step: 0.1 },
+  }
+}
+
+export class Colorizer extends Displayable {
+  params = {
+    show: false,
+    a: new Color(0,0,0),
+    b: new Color(255, 255, 255),
+    c: new Color(0,0,0),
+    d: new Color(255, 255, 255),
+  }
 }
 
 export class TexGen extends Displayable {
   params = {
     resolution: { value: 1024, rangeMin: 0, rangeMax: 2048 },
-    colorize: false,
-    effects: []
+    colorize: new Colorizer,
+    effects: [new KdGridEffect, new RandomGridEffect, new GridEffect]
   }
 
   onStart() {

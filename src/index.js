@@ -1,7 +1,9 @@
-import {DisplayableComponent} from './Components/DisplayableComponent.jsx'
 import React from "react"
 import ReactDOM from "react-dom"
 import {TexGen} from "./Behaviors/TexGen.js"
+import App from './Core/App.js'
+import { AppComponent } from './Components/AppComponent.jsx'
 
-let tg = new TexGen()
-ReactDOM.render(<DisplayableComponent instance={tg} />, document.getElementById("main"))
+let app = new App(new TexGen)
+ReactDOM.render(<AppComponent instance={app} />, document.getElementById("main"))
+app.onApplicationStart()

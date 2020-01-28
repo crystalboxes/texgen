@@ -27,9 +27,16 @@ export class FieldRepresentation extends Component {
 export class NumberField extends FieldRepresentation {
   constructor(props) {
     super(props)
+    // check value 
+    let is01 = this.state.value > -0.0001 && this.state.value < 1.0001
+    let defaults = {
+      rmax: is01 ? 1.0 : 100,
+      step: is01 ? .0001 : 1
+    }
     this.options = {
-      rangeMin: 'rangeMin' in props.data ? props.data.rangeMin : 0,
-      rangeMax: 'rangeMax' in props.data ? props.data.rangeMax : 100,
+      rangeMin: props.data && 'rangeMin' in props.data ? props.data.rangeMin : 0,
+      rangeMax: props.data && 'rangeMax' in props.data ? props.data.rangeMax : defaults.rmax,
+      step: props.data && 'step' in props.data ? props.data.step : defaults.step
     }
   }
   render() {
@@ -41,6 +48,7 @@ export class NumberField extends FieldRepresentation {
         min={this.options.rangeMin}
         max={this.options.rangeMax}
         value={this.state.value}
+        step={this.options.step}
         onChange={this.handleInputChange}
       />
     </div>
