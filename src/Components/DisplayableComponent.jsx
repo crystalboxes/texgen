@@ -46,12 +46,15 @@ export class DisplayableComponent extends Component {
           default: v.value,
           data: v.data
         }
+        function addElement(constructor, attribs, ch) {
+          return React.createElement(constructor, attribs, ch)
+        }
         switch (v.valueType) {
           case 'number':
             // data contains stuff like bounds etc.
-            return React.createElement(NumberField, attribs)
+            return addElement(NumberField, attribs)
           case 'boolean':
-            return React.createElement(Toggle, attribs)
+            return addElement(Toggle, attribs)
           case 'array':
             // It's required that incoming structs are derived from Displayable
             if (v.value.length == 0) {
@@ -59,9 +62,9 @@ export class DisplayableComponent extends Component {
             }
             let i = 0
             const displayTitle = false
-            let elems = displayTitle ? [React.createElement('h3', {key: i}, [v.name])] : []
+            let elems = displayTitle ? [addElement('h3', {key: i}, [v.name])] : []
             for (let element of v.value) {
-              elems.push(React.createElement(DisplayableComponent, {
+              elems.push(addElement(DisplayableComponent, {
                 key: keyId + i++,
                 instance: element
               }))
@@ -69,12 +72,12 @@ export class DisplayableComponent extends Component {
             return elems
           case 'object':
             if ('display' in v.value) {
-              return React.createElement(v.value.display, { key: keyId, title: v.name, instance: v.value })
+              return addElement(v.value.display, { key: keyId, title: v.name, instance: v.value })
             } else {
-              return React.createElement(DisplayableComponent, {key: keyId, title: v.name, instance: v.value})
+              return addElement(DisplayableComponent, {key: keyId, title: v.name, instance: v.value})
             }
           default:
-            return React.createElement(FieldRepresentation, attribs)
+            return addElement(FieldRepresentation, attribs)
         }
       })
   }
