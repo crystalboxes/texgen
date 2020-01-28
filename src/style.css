@@ -16,15 +16,16 @@ body, p, h3 {
   display: block;
 }
 
-#app-parameters {
+/* #app-parameters {
+} */
+.script-parameters {
   background-color: rgba(0, 0, 0, 0.1) !important;
   left:0;
   position: fixed;
   padding-bottom: 10px;
   top:0;
 }
-
-#app-parameters > .displayable-struct {
+.script-parameters > .paramsContainer {
   position: relative;
 }
 
