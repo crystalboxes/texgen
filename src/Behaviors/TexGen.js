@@ -1,6 +1,7 @@
-import { Script, Displayable } from '../core/App.js'
 import Color from '../core/Color.js'
 import Graphics from '../gl/Graphics.js'
+import Script from '../core/Script.js'
+import Displayable from '../core/Displayable.js'
 
 export class GridEffect extends Displayable {
   params = {
@@ -56,10 +57,10 @@ export class RandomGridEffect extends Displayable {
 export class Colorizer extends Displayable {
   params = {
     show: false,
-    a: new Color(0,0,0),
-    b: new Color(255, 255, 255),
-    c: new Color(0,0,0),
-    d: new Color(255, 255, 255),
+    a:  Color.make(0,0,0),
+    b:  Color.make(255, 255, 255),
+    c:  Color.make(0,0,0),
+    d:  Color.make(255, 255, 255),
   }
 }
 

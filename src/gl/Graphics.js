@@ -19,6 +19,9 @@ class Graphics {
     canvas.width  = canvas.clientWidth
     canvas.height = canvas.clientHeight
 
+    canvas.style.width = canvas.width / window.devicePixelRatio + 'px'
+    canvas.style.height = canvas.height / window.devicePixelRatio + 'px'
+
     Graphics.setViewport()
 
     rect = new Rect()
