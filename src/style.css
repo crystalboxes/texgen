@@ -1,5 +1,5 @@
 body {
-  font-size: 20px;
+  font-size: 12px;
   font-family: sans-serif;
 }
 
@@ -8,6 +8,32 @@ body, p, h3 {
   margin: 0;
 }
 
-.displayable-struct {
+#app-parameters {
+  position: fixed;
+  top:0;
+  left:0;
+}
+
+#app-parameters > .displayable-struct {
+  position: relative;
+}
+
+.column { 
+  float: left;
+  padding-right: 20px;
   width: 180px;
+}
+
+.param-field {
+  max-width: 200px;
+}
+
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Opera and Firefox */
 }
