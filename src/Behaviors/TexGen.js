@@ -1,5 +1,6 @@
-import Displayable from '../Core/Displayable.js'
-import Color from '../Core/Color.js'
+import { Script, Displayable } from '../core/App.js'
+import Color from '../core/Color.js'
+import Graphics from '../gl/Graphics.js'
 
 export class GridEffect extends Displayable {
   params = {
@@ -62,7 +63,7 @@ export class Colorizer extends Displayable {
   }
 }
 
-export class TexGen extends Displayable {
+export class TexGen extends Script {
   params = {
     resolution: { value: 1024, rangeMin: 0, rangeMax: 2048 },
     colorize: new Colorizer,
@@ -73,6 +74,7 @@ export class TexGen extends Displayable {
   }
 
   onUpdate() {
+    Graphics.drawRect(10, 10, 100, 100, {r:1.0, g: 0, b:0,a:1})
   }
 
   onDestroy() {
