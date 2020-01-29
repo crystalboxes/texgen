@@ -1,5 +1,5 @@
 import svgToImage from 'svg-to-image'
-import Graphics from './Graphics'
+import Graphics from './Graphics.js'
 
 class Image {
   constructor() {
@@ -39,6 +39,9 @@ class Image {
     this.texture = tex
   }
 
+  draw(x, y, w, h) {
+    Graphics.drawImage(this, x,y,w,h)
+  }
 }
 
 export default Image
