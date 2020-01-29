@@ -88,7 +88,8 @@ export class TexGen extends Script {
 
   onUpdate() {
     gr.clearColor({r:1, g:1, b:1, a:1})
-    gr.drawRect(10, 10, 100, 100, { r: 1.0, g: 0, b: 0, a: 1 })
+    gr.setColor({ r: 1.0, g: 0, b: 0, a: 1 })
+    gr.drawRect(10, 10, 100, 200)
   }
 
   onDestroy() {

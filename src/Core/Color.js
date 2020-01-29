@@ -1,7 +1,7 @@
 import { ColorComponent } from '../components/ColorComponent.jsx'
 import { Displayable } from '../core/Displayable.js'
 
-let divisor = 1 / 255.0
+const divisor = 1 / 255.0
 // range 0..255
 export class Color extends Displayable {
   isFloat = false
@@ -18,7 +18,8 @@ export class Color extends Displayable {
   static makeFloat(r, g, b, a) {
     let c = new Color
     c.isFloat = true
-    this.params = { r: r, g: g, b: b, a: a }
+    c.params = { r: r, g: g, b: b, a: a }
+    return c
   }
 
   display = ColorComponent

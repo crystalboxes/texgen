@@ -1,12 +1,21 @@
 import Shader from './Shader.js'
 import Rect from './Rect.js'
+import Color from '../core/Color.js'
+import RectV2 from './RectV2.js'
 
 let gl = null
 let rect = null
+let rect2 = null
 
 function err(msg) {
   console.error(msg)
 }
+
+class State {
+  color = Color.makeFloat(1,1,1,1)
+}
+
+let state = new State
 
 class Graphics {
   static init(canvas) {
@@ -25,10 +34,19 @@ class Graphics {
     Graphics.setViewport()
 
     rect = new Rect()
+    rect2 = new RectV2
   }
 
-  static drawRect(x,y,w,h, color) {
-    rect.draw(x,y,w,h, color)
+  static setColor(color) {
+    state.color = color
+  }
+
+  static drawRect(x, y, w, h, color) {
+    rect2.draw(x, y, w, h, color ? color : state.color)
+  }
+
+  static drawCircle(x, y, r, color) {
+
   }
 
   static setViewport(x, y, w, h) {
