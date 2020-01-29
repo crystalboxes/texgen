@@ -14,8 +14,6 @@ class SolidShape {
     circle: { size: 0, buffer: null, resolution: defaultCircleResolution }
   }
 
-  solidShader = null
-
   setCircleResolution(value) {
     this.shapes.circle.resolution = value > 0 ? value : defaultCircleResolution
     this.updateCircle()
@@ -27,6 +25,8 @@ class SolidShape {
       'solid.vert.glsl', 'solid.frag.glsl')
     this.imageShader = Graphics.createShader(
       'image.vert.glsl', 'image.frag.glsl')
+    this.imageFlipUv = Graphics.createShader(
+      'image-uvflip.vert.glsl', 'image.frag.glsl')
 
     let program = this.solidShader.program
     let makeBufferWithData = function (data) {
@@ -42,7 +42,7 @@ class SolidShape {
       buffer: makeBufferWithData([
         0, 0, 0, 1, 1, 0,
         1, 0, 0, 1, 1, 1,
-      ])
+      ]),
     }
 
     this.updateCircle()
@@ -85,7 +85,17 @@ class SolidShape {
     let isImage = typeof shape === 'object' && 'width' in shape && 'height' in shape
 
     let gl = Graphics.gl
-    let program = isImage ? this.imageShader.program : this.solidShader.program
+    let program = null
+    if (isImage) {
+      // this is an fbo
+      if ('fb' in shape) {
+        program = this.imageFlipUv.program
+      } else {
+        program = this.imageShader.program
+      }
+    } else {
+      program = this.solidShader.program
+    }
 
     gl.useProgram(program)
     gl.uniformMatrix4fv(gl.getUniformLocation(program, 'xform'), false, mat)

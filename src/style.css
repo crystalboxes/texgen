@@ -22,6 +22,10 @@ input[type="checkbox"] {
   display: block;
 }
 
+strong.cursor {
+  font-weight: normal;
+}
+
 .collapse-button {
   background: none;
 	color: inherit;

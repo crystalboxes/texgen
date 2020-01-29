@@ -32,7 +32,7 @@ class Framebuffer extends Image {
     }
 
     this.fb = gl.createFramebuffer();
-    gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, this.fb);
     gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, targetTexture, 0);
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
 
@@ -40,11 +40,18 @@ class Framebuffer extends Image {
   }
 
   begin() {
-    gl.bindFramebuffer(gl.FRAMEBUFFER, fb);
+    
+    let gl = Graphics.gl
+    Graphics.currentFbo = this
+    gl.bindFramebuffer(gl.FRAMEBUFFER, this.fb);
+    Graphics.setViewport(0, 0, this.width, this.height)
   }
 
   end() {
+    let gl = Graphics.gl
+    Graphics.currentFbo = null
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+    Graphics.setViewport()
   }
 }
 

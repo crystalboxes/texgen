@@ -8,13 +8,57 @@ class Image {
     this.width = 1
     this.height = 1
   }
-  
-  static fromSvg(svg) {
+
+  static fromSvg(svg, targetWidth) {
     let img = new Image
+
+    let resize = targetWidth != null
+    let width = 0
+    let height = 0
+
+    const defaultResolution = 1024
+    targetWidth = targetWidth || defaultResolution
+
+    // extract width and height from svg
+    let parser = new DOMParser()
+    let svgDoc = parser.parseFromString(svg, 'image/svg+xml')
+    let root = svgDoc.getElementsByTagName('svg')[0]
+
+    width = root.getAttribute('width')
+    if (!width) {
+      width = targetWidth
+    }
+
+    height = root.getAttribute('height')
+    if (!height) {
+      height = width
+    }
+
+    let viewBox = root.getAttribute('viewBox')
+    if (viewBox) {
+      let [l, t, w, h] = viewBox.split(' ')
+      width = w || width
+      height = h || height
+    }
+    let aspectRatio = width / height
+    if (resize) {
+      width = targetWidth
+      height = targetWidth / aspectRatio
+    }
+
     svgToImage(svg, function (err, image) {
       if (err) throw err
+
+      image.width = width
+      image.height = height
+
       img.img = image
+
+      img.width = width
+      img.height = height
+
       img.updateResource()
+
     })
     return img
   }
@@ -40,7 +84,7 @@ class Image {
   }
 
   draw(x, y, w, h) {
-    Graphics.drawImage(this, x,y,w,h)
+    Graphics.drawImage(this, x, y, w, h)
   }
 }
 

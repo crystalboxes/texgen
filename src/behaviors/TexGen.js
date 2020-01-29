@@ -1,5 +1,6 @@
 import Color from '../core/Color.js'
 import Graphics from '../gl/Graphics.js'
+import Framebuffer from '../gl/Framebuffer.js'
 import Image from '../gl/Image.js'
 import Script from '../core/Script.js'
 import Displayable from '../core/Displayable.js'
@@ -86,13 +87,18 @@ export class TexGen extends Script {
     effects: [new KdGridEffect, new RandomGridEffect, new GridEffect]
   }
   svg = null
+  fb = new Framebuffer
   onStart() {
     // console.log(typeof sampleImage)
-    this.svg = Image.fromSvg(sampleImage)
+    this.svg = Image.fromSvg(sampleImage, 256)
+    this.fb.allocate(300, 300)
   }
 
   onUpdate() {
-    gr.clearColor({r:1, g:1, b:1, a:1})
+    gr.clearColor('#333')
+    this.fb.begin()
+    gr.clearColor('#fff')
+
     gr.setColor({ r: 1.0, g: 0, b: 0, a: 1 })
     gr.drawRect(12, 20, 100, 100)
 
@@ -105,6 +111,9 @@ export class TexGen extends Script {
     gr.drawCircle(400, 300, 100)
 
     gr.drawImage(this.svg, 200, 300)
+    this.fb.end()
+
+    this.fb.draw(0, 0)
   }
 
   onDestroy() {

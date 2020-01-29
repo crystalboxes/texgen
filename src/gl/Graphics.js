@@ -4,13 +4,14 @@ import Color from '../core/Color.js'
 
 let gl = null
 let rect = new SolidShape()
+let currentFbo = null
 
 function err(msg) {
   console.error(msg)
 }
 
 class State {
-  color = Color.makeFloat(1,1,1,1)
+  color = Color.makeFloat(1, 1, 1, 1)
 }
 
 let state = new State
@@ -23,7 +24,7 @@ class Graphics {
       return
     }
     // TODO handle resolution correctly
-    canvas.width  = canvas.clientWidth
+    canvas.width = canvas.clientWidth
     canvas.height = canvas.clientHeight
 
     canvas.style.width = canvas.width / window.devicePixelRatio + 'px'
@@ -33,23 +34,46 @@ class Graphics {
     rect.init()
   }
 
+  static get width() {
+    return Graphics.resolution.width
+  }
+  
+  static get height() {
+    return Graphics.resolution.height
+  }
+
+  static get resolution() {
+    return {
+      width:  currentFbo ? currentFbo.width :  gl.canvas.width,
+      height:  currentFbo ? currentFbo.height :  gl.canvas.height
+    }
+  }
+
+  static get currentFbo() {
+    return currentFbo
+  }
+
+  static set currentFbo(value) {
+    currentFbo = value
+  }
+
   static setColor(color) {
     state.color = color
   }
 
   static drawRect(x, y, w, h, color) {
-    rect.draw(rect.shapeType.rect, x, y, w, h, color ? color : state.color)
+    rect.draw(rect.shapeType.rect, x, y, w, h, Color.validate(color) || state.color)
   }
 
-  static drawImage(image, x,y,w,h) {
+  static drawImage(image, x, y, w, h) {
     if (!image.texture) {
       return
     }
-    w = w | image.width
-    h = h | image.height
-    rect.draw(image, x,y,w,h)
+    w = w || image.width
+    h = h || image.height
+    rect.draw(image, x, y, w, h)
   }
-  
+
   static get circleResolution() {
     return rect.shapes.circle.resolution
   }
@@ -59,28 +83,28 @@ class Graphics {
   }
 
   static drawCircle(x, y, r, color) {
-    rect.draw(rect.shapeType.circle, x, y, r, r, color ? color : state.color)
+    rect.draw(rect.shapeType.circle, x, y, r, r, Color.validate(color) || state.color)
   }
 
   static setViewport(x, y, w, h) {
-    gl.viewport(x | 0, y | 0, w | gl.canvas.width, h | gl.canvas.height)
+    gl.viewport(x || 0, y || 0, w || gl.canvas.width, h || gl.canvas.height)
   }
 
   static clearColor(color) {
+    color = Color.validate(color) || Color.validate(0)
     gl.clearColor(color.r, color.g, color.b, color.a)
     gl.clear(gl.COLOR_BUFFER_BIT)
+
+    // Enable transparency
+    // TODO move to a separate function (if it's necessary)
+    gl.enable(gl.BLEND)
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
   }
 
   static get gl() {
     return gl
   }
-  
-  static get resolution() {
-    return {
-      width: gl.canvas.width, 
-      height: gl.canvas.height
-    }
-  }
+
 
   static createShader(vtxSrc, fragSrc, errorCallback) {
     if (!errorCallback) {
