@@ -106,7 +106,7 @@ export class TexGen extends Script {
         127 + 127 * sin(i * 0.011 + time),
         127 + 127 * sin(i * 0.012 + time),
       )
-      gr.drawCircle(500 + 100 * sin(i * 0.02 + time), 50 + i, 50 + 40 * sin(i * 0.005 + time))
+      gr.drawCircle(gr.width * 0.5 + 100 * sin(i * 0.02 + time), 150 + i, 50 + 40 * sin(i * 0.005 + time))
     }
 
 

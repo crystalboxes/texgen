@@ -5,6 +5,7 @@ import App from './core/App.js'
 import { AppComponent } from './components/AppComponent.jsx'
 import './style.scss'
 
-let app = new App(new TexGen, {width: 800, height: 800})
+let screenSize = 1280
+let app = new App(new TexGen, {width: screenSize, height: screenSize})
 ReactDOM.render(<AppComponent instance={app} />, document.getElementById("main"))
 app.onApplicationStart()
