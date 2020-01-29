@@ -1,5 +1,15 @@
+@use "sass:color";
+
+$main-color: rgb(37, 37, 37);
+$hue: hue($main-color);
+$sat: saturation($main-color);
+$br: lightness($main-color);
+
+$parameters-brightness: lightness(rgb(75, 75, 75));
+
+
 body {
-  background-color: rgb(0, 139, 219);
+  background-color: hsla($hue, $sat, $br, 1.0);
   font-size: 10px;
   font-family: 'Roboto Condensed', sans-serif;
   letter-spacing: 0.45pt;
@@ -41,7 +51,7 @@ strong.cursor {
 }
 
 .script-parameters {
-  background-color: rgba(51, 92, 145, 0.6) !important;
+  background-color: hsla($hue + $hue * 0.08, $sat * 0.44, $parameters-brightness, 0.6) !important;
   left:0;
   min-width: 500px;
   padding: 0 0 2px 2px;
@@ -74,20 +84,27 @@ strong.cursor {
                                   supported by Chrome, Opera and Firefox */
 }
 
+$slider-height: 10px;
+$slider-active-color: #ddd;
+
+.slider-text {
+  color: $slider-active-color;
+}
+
 .rc-slider {
-  padding: 2px 0 15px 0 !important;
+  padding: 2px 0 $slider-height + 1 0 !important;
 }
 
 .rc-slider-track {
-  background-color: #ddd !important;
-  height: 14px !important;
+  background-color: $slider-active-color !important;
+  height: $slider-height !important;
   border-radius: 0px !important;
 }
 
 .rc-slider-rail {
   background-color: rgba(0, 0, 0, 0.1) !important;
   border-radius: 0px !important;
-  height: 14px !important;
+  height: $slider-height !important;
 }
 .rc-slider-handle {
   display: none !important;
