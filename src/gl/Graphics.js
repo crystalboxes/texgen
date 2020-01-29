@@ -1,11 +1,9 @@
 import Shader from './Shader.js'
-import Rect from './Rect.js'
+import SolidShape from './SolidShape.js'
 import Color from '../core/Color.js'
-import RectV2 from './RectV2.js'
 
 let gl = null
-let rect = null
-let rect2 = null
+let rect = new SolidShape()
 
 function err(msg) {
   console.error(msg)
@@ -32,9 +30,7 @@ class Graphics {
     canvas.style.height = canvas.height / window.devicePixelRatio + 'px'
 
     Graphics.setViewport()
-
-    rect = new Rect()
-    rect2 = new RectV2
+    rect.init()
   }
 
   static setColor(color) {
@@ -42,11 +38,28 @@ class Graphics {
   }
 
   static drawRect(x, y, w, h, color) {
-    rect2.draw(x, y, w, h, color ? color : state.color)
+    rect.draw(rect.shapeType.rect, x, y, w, h, color ? color : state.color)
+  }
+
+  static drawImage(image, x,y,w,h) {
+    if (!image.texture) {
+      return
+    }
+    w = w | image.width
+    h = h | image.height
+    rect.draw(image, x,y,w,h)
+  }
+  
+  static get circleResolution() {
+    return rect.shapes.circle.resolution
+  }
+
+  static set circleResolution(value) {
+    rect.setCircleResolution(value)
   }
 
   static drawCircle(x, y, r, color) {
-
+    rect.draw(rect.shapeType.circle, x, y, r, r, color ? color : state.color)
   }
 
   static setViewport(x, y, w, h) {

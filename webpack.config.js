@@ -19,6 +19,10 @@ module.exports = {
         loader: 'webpack-glsl-loader'
       },
       {
+        test: /\.svg$/,
+        loader: 'svg-inline-loader'
+      },
+      {
         test: /\.html$/,
         use: [
           {
