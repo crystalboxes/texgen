@@ -89,28 +89,39 @@ export class TexGen extends Script {
   svg = null
   fb = new Framebuffer
   onStart() {
-    // console.log(typeof sampleImage)
     this.svg = Image.fromSvg(sampleImage, 256)
-    this.fb.allocate(300, 300)
+    this.fb.allocate(gr.width, gr.height)
+    gr.circleResolution = 30
   }
 
   onUpdate() {
+    let sin = Math.cos
     gr.clearColor('#333')
     this.fb.begin()
-    gr.clearColor('#fff')
+    gr.clearColor(0)
+    let time = this.time.current
+    for (let i = 0; i < 900; i++) {
+      gr.setColor(
+        127 + 127 * sin(i * 0.01 + time),
+        127 + 127 * sin(i * 0.011 + time),
+        127 + 127 * sin(i * 0.012 + time),
+      )
+      gr.drawCircle(500 + 100 * sin(i * 0.02 + time), 50 + i, 50 + 40 * sin(i * 0.005 + time))
+    }
 
-    gr.setColor({ r: 1.0, g: 0, b: 0, a: 1 })
-    gr.drawRect(12, 20, 100, 100)
 
-    gr.setColor({ r: 0.0, g: 1, b: 0, a: 1 })
-    gr.circleResolution = 10
-    gr.drawCircle(300, 300, 100)
+    // gr.setColor({ r: 1.0, g: 0, b: 0, a: 1 })
+    // gr.drawRect(12, 20, 100, 100)
 
-    gr.setColor({ r: 0.0, g: 0.3, b: 0, a: 1 })
-    gr.circleResolution = 30
-    gr.drawCircle(400, 300, 100)
+    // gr.setColor({ r: 0.0, g: 1, b: 0, a: 1 })
+    // gr.circleResolution = 10
+    // gr.drawCircle(300, 300, 100)
 
-    gr.drawImage(this.svg, 200, 300)
+    // gr.setColor({ r: 0.0, g: 0.3, b: 0, a: 1 })
+    // gr.circleResolution = 30
+    // gr.drawCircle(400, 300, 100)
+
+    // gr.drawImage(this.svg, 200, 300)
     this.fb.end()
 
     this.fb.draw(0, 0)
