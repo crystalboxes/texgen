@@ -1,12 +1,19 @@
 import Shader from './Shader.js'
-import Rect from './Rect.js'
+import SolidShape from './SolidShape.js'
+import Color from '../core/Color.js'
 
 let gl = null
-let rect = null
+let rect = new SolidShape()
 
 function err(msg) {
   console.error(msg)
 }
+
+class State {
+  color = Color.makeFloat(1,1,1,1)
+}
+
+let state = new State
 
 class Graphics {
   static init(canvas) {
@@ -23,12 +30,36 @@ class Graphics {
     canvas.style.height = canvas.height / window.devicePixelRatio + 'px'
 
     Graphics.setViewport()
-
-    rect = new Rect()
+    rect.init()
   }
 
-  static drawRect(x,y,w,h, color) {
-    rect.draw(x,y,w,h, color)
+  static setColor(color) {
+    state.color = color
+  }
+
+  static drawRect(x, y, w, h, color) {
+    rect.draw(rect.shapeType.rect, x, y, w, h, color ? color : state.color)
+  }
+
+  static drawImage(image, x,y,w,h) {
+    if (!image.texture) {
+      return
+    }
+    w = w | image.width
+    h = h | image.height
+    rect.draw(image, x,y,w,h)
+  }
+  
+  static get circleResolution() {
+    return rect.shapes.circle.resolution
+  }
+
+  static set circleResolution(value) {
+    rect.setCircleResolution(value)
+  }
+
+  static drawCircle(x, y, r, color) {
+    rect.draw(rect.shapeType.circle, x, y, r, r, color ? color : state.color)
   }
 
   static setViewport(x, y, w, h) {

@@ -29,6 +29,7 @@ class App {
       t.deltaTime = t.current - t.previous
 
       that.script.onUpdate()
+      requestAnimationFrame(drawLoop)
     }
 
     requestAnimationFrame(drawLoop)

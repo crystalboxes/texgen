@@ -1,7 +1,9 @@
 import Color from '../core/Color.js'
 import Graphics from '../gl/Graphics.js'
+import Image from '../gl/Image.js'
 import Script from '../core/Script.js'
 import Displayable from '../core/Displayable.js'
+import sampleImage from '../images/android.svg'
 let gr = Graphics
 
 export class ParamsBlock extends Displayable {
@@ -70,6 +72,7 @@ export class Colorizer extends Displayable {
     d: Color.make(255, 255, 255),
   }
 }
+
 export class MainParams extends ParamsBlock {
   params = {
     resolution: { value: 1024, rangeMin: 0, rangeMax: 2048 },
@@ -82,13 +85,26 @@ export class TexGen extends Script {
     main: new MainParams,
     effects: [new KdGridEffect, new RandomGridEffect, new GridEffect]
   }
-
+  svg = null
   onStart() {
+    // console.log(typeof sampleImage)
+    this.svg = Image.fromSvg(sampleImage)
   }
 
   onUpdate() {
     gr.clearColor({r:1, g:1, b:1, a:1})
-    gr.drawRect(10, 10, 100, 100, { r: 1.0, g: 0, b: 0, a: 1 })
+    gr.setColor({ r: 1.0, g: 0, b: 0, a: 1 })
+    gr.drawRect(12, 20, 100, 100)
+
+    gr.setColor({ r: 0.0, g: 1, b: 0, a: 1 })
+    gr.circleResolution = 10
+    gr.drawCircle(300, 300, 100)
+
+    gr.setColor({ r: 0.0, g: 0.3, b: 0, a: 1 })
+    gr.circleResolution = 30
+    gr.drawCircle(400, 300, 100)
+
+    gr.drawImage(this.svg, 200, 300)
   }
 
   onDestroy() {

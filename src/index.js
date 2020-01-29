@@ -5,6 +5,6 @@ import App from './core/App.js'
 import { AppComponent } from './components/AppComponent.jsx'
 import './style.css'
 
-let app = new App(new TexGen, {width: 800, height: 600})
+let app = new App(new TexGen, {width: 800, height: 800})
 ReactDOM.render(<AppComponent instance={app} />, document.getElementById("main"))
 app.onApplicationStart()
