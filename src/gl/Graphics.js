@@ -57,11 +57,11 @@ class Graphics {
     currentFbo = value
   }
 
-  static setColor(color) {
-    state.color = color
+  static setColor(...color) {
+    state.color = Color.validate(color)
   }
 
-  static drawRect(x, y, w, h, color) {
+  static drawRect(x, y, w, h, ...color) {
     rect.draw(rect.shapeType.rect, x, y, w, h, Color.validate(color) || state.color)
   }
 
@@ -90,7 +90,7 @@ class Graphics {
     gl.viewport(x || 0, y || 0, w || gl.canvas.width, h || gl.canvas.height)
   }
 
-  static clearColor(color) {
+  static clearColor(...color) {
     color = Color.validate(color) || Color.validate(0)
     gl.clearColor(color.r, color.g, color.b, color.a)
     gl.clear(gl.COLOR_BUFFER_BIT)

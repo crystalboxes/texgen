@@ -11,6 +11,9 @@ export class Color extends Displayable {
     if (!o) {
       return null
     }
+    if (Array.isArray(o) && o.length === 1) {
+      o = o[0]
+    }
     let objectType = typeof o
     if (objectType === 'string') {
       return Color.parse(o)
