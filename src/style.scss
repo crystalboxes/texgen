@@ -1,6 +1,6 @@
 @use "sass:color";
 
-$main-color: rgb(37, 37, 37);
+$main-color: rgb(53, 53, 53);
 $hue: hue($main-color);
 $sat: saturation($main-color);
 $br: lightness($main-color);

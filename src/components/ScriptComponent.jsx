@@ -20,7 +20,7 @@ export class ScriptComponent extends DisplayableComponent {
 
   render() {
     return <Draggable handle="strong">
-      <div className={this.instance._className}>
+      <div className={this.owner._className}>
         <strong className="cursor">
           <div>
             <button className="collapse-button" onClick={this.handleClick}>{this.state.open ? "[-]" : "[+]"}</button>

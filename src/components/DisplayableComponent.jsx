@@ -8,7 +8,7 @@ import { NumberField } from './NumberField.jsx'
 export class DisplayableComponent extends Component {
   constructor(props) {
     super(props)
-    this.instance = props.instance
+    this.owner = props.instance
     if ('title' in props) {
       this.title = props.title
     }
@@ -16,25 +16,18 @@ export class DisplayableComponent extends Component {
 
   getParsedParameters() {
     let entries = []
-    if ('_v2' in this.instance) {
-      entries = Object.entries(this.instance).filter(x => !x[0].startsWith('_'))
-        .filter(x => {
-          if ('_params' in this.instance && Array.isArray(this.instance._params)) {
-            return this.instance._params.includes(x[0])
-          } else if ('_excludeParamNames' in this.instance && Array.isArray(this.instance._excludeParamNames)) {
-            return !this.instance._excludeParamNames.includes(x[0])
-          } else {
-            return true
-          }
-        })
-        var seconds = new Date().getTime() / 10000000
-    } else {
-      if (!('params' in this.instance)) {
-        console.error("found")
-      }
-      entries = Object.entries(this.instance.params)
-    }
-    let isDisplayable = function(o) {
+    entries = Object.entries(this.owner).filter(x => !x[0].startsWith('_'))
+      .filter(x => {
+        if ('_params' in this.owner && Array.isArray(this.owner._params)) {
+          return this.owner._params.includes(x[0])
+        } else if ('_excludeParamNames' in this.owner && Array.isArray(this.owner._excludeParamNames)) {
+          return !this.owner._excludeParamNames.includes(x[0])
+        } else {
+          return true
+        }
+      })
+
+    let isDisplayable = function (o) {
       return typeof o === 'object' && '_displayable' in o
     }
 
@@ -42,9 +35,9 @@ export class DisplayableComponent extends Component {
       .map(x => {
         let displayName = x[0]
         let val = x[1]
-        let object = null
+        let object = this.owner
         let valueType = typeof val
-        
+
         if (val == null) {
           return null
         }
@@ -53,7 +46,7 @@ export class DisplayableComponent extends Component {
         if (Array.isArray(val)) {
           valueType = 'array'
           // check for illegal objects inside
-          for(let o of val) {
+          for (let o of val) {
             if (typeof o === 'object' && !isDisplayable(o)) {
               return null
             }
@@ -85,7 +78,8 @@ export class DisplayableComponent extends Component {
           name: v.name,
           key: keyId,
           default: v.value,
-          data: v.data
+          data: v.data,
+          owner: this.owner
         }
         function addElement(constructor, attribs, ch) {
           return React.createElement(constructor, attribs, ch)
@@ -132,9 +126,9 @@ export class DisplayableComponent extends Component {
   }
 
   render() {
-    if (!('_className' in this.instance)) {
+    if (!('_className' in this.owner)) {
       console.error("something is wrong")
     }
-    return <div className={this.instance._className}>{this.getElements()}</div>
+    return <div className={this.owner._className}>{this.getElements()}</div>
   }
 }

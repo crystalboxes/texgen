@@ -71,7 +71,6 @@ export class Color extends Displayable {
   get b() { return this.isFloat ? this.blue : this.blue.value * divisor }
   get a() { return this.isFloat ? this.alpha : 1.0 }
 
-  _v2 = true
   _displayable = ColorComponent
   _params = ['red', 'green', 'blue', 'alpha']
 }

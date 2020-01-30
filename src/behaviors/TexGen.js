@@ -9,7 +9,6 @@ let gr = Graphics
 
 export class ParamsBlock extends Displayable {
   _className = 'displayable-struct column'
-  _v2 = true
 }
 
 export class GridEffect extends ParamsBlock {
@@ -63,7 +62,6 @@ export class Colorizer extends Displayable {
   b = Color.make(255, 255, 255)
   c = Color.make(0, 0, 0)
   d = Color.make(255, 255, 255)
-  _v2 = true
 }
 
 export class MainParams extends ParamsBlock {
@@ -87,8 +85,6 @@ export class TexGen extends Script {
     let sin = Math.sin
     gr.clearColor('#333')
     this.fb.begin()
-
-    
 
     gr.clearColor(this.main.colorize.a)
     let time = this.time.current
@@ -116,8 +112,10 @@ export class TexGen extends Script {
     this.fb.end()
     this.fb.draw(0, 0)
   }
+  
+  onValidate(val) {
+  }
 
   onDestroy() {
   }
-  // callbacks
 }

@@ -1,9 +1,11 @@
 import React, { Component } from "react"
+import Events from "../core/Events"
 
 export class FieldRepresentation extends Component {
   constructor(props) {
     super(props)
     this.name = props.name
+    this.owner = props.owner
     this.state = {
       value: props.default
     }
@@ -30,6 +32,15 @@ export class FieldRepresentation extends Component {
       const target = event.target;
       value = target.type === 'checkbox' ? target.checked : target.value;
     }
+    // set value
+    let ob = this.owner[this.name]
+    if (typeof ob === 'object') {
+      ob.value = value
+    } else {
+      this.owner[this.name] = value
+    }
+    
+    Events.invoke(Events.Type.ParameterChanged, {name: this.name}, this.owner)
 
     this.setState({
       value: value
