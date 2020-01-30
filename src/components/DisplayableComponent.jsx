@@ -3,7 +3,7 @@ import {
   FieldRepresentation,
   Toggle
 } from './FieldRepresentation.jsx'
-import {NumberField} from './NumberField.jsx'
+import { NumberField } from './NumberField.jsx'
 
 export class DisplayableComponent extends Component {
   constructor(props) {
@@ -15,31 +15,72 @@ export class DisplayableComponent extends Component {
   }
 
   getParsedParameters() {
-    return Object.entries(this.instance.params)
+    let entries = []
+    if ('_v2' in this.instance) {
+      entries = Object.entries(this.instance).filter(x => !x[0].startsWith('_'))
+        .filter(x => {
+          if ('_params' in this.instance && Array.isArray(this.instance._params)) {
+            return this.instance._params.includes(x[0])
+          } else if ('_excludeParamNames' in this.instance && Array.isArray(this.instance._excludeParamNames)) {
+            return !this.instance._excludeParamNames.includes(x[0])
+          } else {
+            return true
+          }
+        })
+        var seconds = new Date().getTime() / 10000000
+    } else {
+      if (!('params' in this.instance)) {
+        console.error("found")
+      }
+      entries = Object.entries(this.instance.params)
+    }
+    let isDisplayable = function(o) {
+      return typeof o === 'object' && '_displayable' in o
+    }
+
+    return entries
       .map(x => {
         let displayName = x[0]
         let val = x[1]
         let object = null
         let valueType = typeof val
+        
+        if (val == null) {
+          return null
+        }
+
         // Special array type since the array is 'object' as well
         if (Array.isArray(val)) {
           valueType = 'array'
+          // check for illegal objects inside
+          for(let o of val) {
+            if (typeof o === 'object' && !isDisplayable(o)) {
+              return null
+            }
+          }
         }
-        if (valueType === 'object' && 'value' in val) {
-          // It's a field with additional attributes required to pass to the component
-          object = val
-          displayName = 'displayName' in object ? object.displayName : displayName
-          valueType = typeof val.value
-          val = val.value
+
+        if (valueType === 'object') {
+          if ('value' in val) {
+            // It's a field with additional attributes required to pass to the component
+            object = val
+            displayName = 'displayName' in object ? object.displayName : displayName
+            valueType = typeof val.value
+            val = val.value
+          } else {
+            if (!isDisplayable(val)) {
+              return null
+            }
+          }
         }
         return { name: displayName, valueType: valueType, value: val, data: object }
-      })
+      }).filter(x => x !== null)
   }
 
   getElements() {
     return this.getParsedParameters()
       .map(v => {
-        let keyId = v.name + "_" + Math.random() * (new Date).getMilliseconds() 
+        let keyId = v.name + "_" + Math.random() * (new Date).getMilliseconds()
         let attribs = {
           name: v.name,
           key: keyId,
@@ -62,7 +103,7 @@ export class DisplayableComponent extends Component {
             }
             let i = 0
             const displayTitle = false
-            let elems = displayTitle ? [addElement('h3', {key: i}, [v.name])] : []
+            let elems = displayTitle ? [addElement('h3', { key: i }, [v.name])] : []
             for (let element of v.value) {
               elems.push(addElement(DisplayableComponent, {
                 key: keyId + i++,
@@ -72,9 +113,9 @@ export class DisplayableComponent extends Component {
             return elems
           case 'object':
             if ('display' in v.value) {
-              return addElement(v.value.display, { key: keyId, title: v.name, instance: v.value })
+              return addElement(v.value._displayable, { key: keyId, title: v.name, instance: v.value })
             } else {
-              return addElement(DisplayableComponent, {key: keyId, title: v.name, instance: v.value})
+              return addElement(DisplayableComponent, { key: keyId, title: v.name, instance: v.value })
             }
           default:
             return addElement(FieldRepresentation, attribs)
@@ -91,6 +132,9 @@ export class DisplayableComponent extends Component {
   }
 
   render() {
-    return <div className={this.instance.className}>{this.getElements()}</div>
+    if (!('_className' in this.instance)) {
+      console.error("something is wrong")
+    }
+    return <div className={this.instance._className}>{this.getElements()}</div>
   }
 }

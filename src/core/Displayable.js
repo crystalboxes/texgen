@@ -2,13 +2,12 @@ import {DisplayableComponent} from '../components/DisplayableComponent.jsx'
 
 export class Displayable {
   params = {}
-  viewSettings = {
-    className: 'displayable-struct'
-  }
-  display = DisplayableComponent
 
   get className() {
-    return this.viewSettings.className
+    return this._className
   }
+
+  _displayable = DisplayableComponent
+  _className = 'displayable-struct'
 }
 export default Displayable

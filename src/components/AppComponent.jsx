@@ -13,7 +13,7 @@ export class AppComponent extends Component {
         height={this.instance.settings.height}
       />
       <div id='app-parameters' className='noselect'>
-        {React.createElement(this.instance.script.display, {instance: this.instance.script})}
+        {React.createElement(this.instance.script._displayable, {instance: this.instance.script})}
       </div>
     </div>
   }

@@ -49,27 +49,31 @@ export class Color extends Displayable {
 
   static make(r, g, b) {
     let c = new Color
-    c.params = {
-      r: { value: r | 0, rangeMin: 0, rangeMax: 255, step: 1 },
-      g: { value: g | 0, rangeMin: 0, rangeMax: 255, step: 1 },
-      b: { value: b | 0, rangeMin: 0, rangeMax: 255, step: 1 }
-    }
+    c.red = { value: r | 0, rangeMin: 0, rangeMax: 255, step: 1 }
+    c.green = { value: g | 0, rangeMin: 0, rangeMax: 255, step: 1 }
+    c.blue = { value: b | 0, rangeMin: 0, rangeMax: 255, step: 1 }
     return c
   }
 
   static makeFloat(r, g, b, a) {
     let c = new Color
     c.isFloat = true
-    c.params = { r: r, g: g, b: b, a: a }
+    c.red = r
+    c.blue = g
+    c.green = b
+    c.alpha = a
     return c
   }
 
-  display = ColorComponent
 
-  get r() { return this.isFloat ? this.params.r : this.params.r.value * divisor }
-  get g() { return this.isFloat ? this.params.g : this.params.g.value * divisor }
-  get b() { return this.isFloat ? this.params.b : this.params.b.value * divisor }
-  get a() { return this.isFloat ? this.params.a : 1.0 }
+  get r() { return this.isFloat ? this.red : this.red.value * divisor }
+  get g() { return this.isFloat ? this.green : this.green.value * divisor }
+  get b() { return this.isFloat ? this.blue : this.blue.value * divisor }
+  get a() { return this.isFloat ? this.alpha : 1.0 }
 
+  _v2 = true
+  _displayable = ColorComponent
+  _params = ['red', 'green', 'blue', 'alpha']
 }
+
 export default Color
