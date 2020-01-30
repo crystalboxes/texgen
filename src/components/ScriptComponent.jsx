@@ -1,21 +1,22 @@
-import React from "react"
+import React, { Component } from "react"
 import { DisplayableComponent } from './DisplayableComponent.jsx'
-import Draggable, { DraggableCore } from 'react-draggable'; // Both at the same time
+import Draggable from 'react-draggable'
+import { CollapseToggle } from './CollapseToggle.jsx'
 
 export class ScriptComponent extends DisplayableComponent {
   constructor(props) {
     super(props)
-    this.state = { open: true }
-    this.handleClick = this.handleClick.bind(this);
+    this.state = { showParameters: true }
   }
 
-  handleClick() {
-    this.state.open = !this.state.open
-    this.setState(this.state);
+  handleOpenCallback(value) {
+    this.setState({ showParameters: value })
   }
 
   getParamsContainer() {
-    return this.state.open ? <div className='paramsContainer'>{this.getElements()}</div> : ''
+    return this.state.showParameters
+      ? <div className='paramsContainer'>{this.getElements()}</div>
+      : ''
   }
 
   render() {
@@ -23,7 +24,7 @@ export class ScriptComponent extends DisplayableComponent {
       <div className={this.owner._className}>
         <strong className="cursor">
           <div>
-            <button className="collapse-button" onClick={this.handleClick}>{this.state.open ? "[-]" : "[+]"}</button>
+            <CollapseToggle className='collapse-button' callback={this.handleOpenCallback.bind(this)} />
             Parameters
           </div>
         </strong>

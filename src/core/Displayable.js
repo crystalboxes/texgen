@@ -7,7 +7,5 @@ export class Displayable {
 
   _displayable = DisplayableComponent
   _className = 'displayable-struct'
-  _v2 = true
-
 }
 export default Displayable

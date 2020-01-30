@@ -106,7 +106,7 @@ export class DisplayableComponent extends Component {
             }
             return elems
           case 'object':
-            if ('display' in v.value) {
+            if ('_displayable' in v.value) {
               return addElement(v.value._displayable, { key: keyId, title: v.name, instance: v.value })
             } else {
               return addElement(DisplayableComponent, { key: keyId, title: v.name, instance: v.value })

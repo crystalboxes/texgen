@@ -11,7 +11,7 @@ function err(msg) {
 }
 
 class State {
-  color = Color.makeFloat(1, 1, 1, 1)
+  color = Color.make(1, 1, 1, 1)
 }
 
 let state = new State
@@ -58,11 +58,11 @@ class Graphics {
   }
 
   static setColor(...color) {
-    state.color = Color.validate(color)
+    state.color = Color.getFloat(color)
   }
 
   static drawRect(x, y, w, h, ...color) {
-    rect.draw(rect.shapeType.rect, x, y, w, h, Color.validate(color) || state.color)
+    rect.draw(rect.shapeType.rect, x, y, w, h, Color.getFloat(color) || state.color)
   }
 
   static drawImage(image, x, y, w, h) {
@@ -83,7 +83,7 @@ class Graphics {
   }
 
   static drawCircle(x, y, r, color) {
-    rect.draw(rect.shapeType.circle, x, y, r, r, Color.validate(color) || state.color)
+    rect.draw(rect.shapeType.circle, x, y, r, r, Color.getFloat(color) || state.color)
   }
 
   static setViewport(x, y, w, h) {
@@ -91,7 +91,7 @@ class Graphics {
   }
 
   static clearColor(...color) {
-    color = Color.validate(color) || Color.validate(0)
+    color = Color.getFloat(color) || Color.getFloat(0)
     gl.clearColor(color.r, color.g, color.b, color.a)
     gl.clear(gl.COLOR_BUFFER_BIT)
 

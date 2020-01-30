@@ -1,6 +1,6 @@
 @use "sass:color";
 
-$main-color: rgb(53, 53, 53);
+$main-color: rgb(18, 23, 43);
 $hue: hue($main-color);
 $sat: saturation($main-color);
 $br: lightness($main-color);
@@ -86,6 +86,15 @@ strong.cursor {
                                   supported by Chrome, Opera and Firefox */
 }
 
+.color-comp {
+  margin-bottom: 5px;
+}
+
+.color-comp > .param-field {
+  padding-left: 2px;
+}
+
+// sliders
 $slider-height: 10px;
 $slider-active-color: #ddd;
 

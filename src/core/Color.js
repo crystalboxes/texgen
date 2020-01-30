@@ -3,10 +3,8 @@ import { Displayable } from '../core/Displayable.js'
 import parse from 'color-parse'
 
 const divisor = 1 / 255.0
-// range 0..255
-export class Color extends Displayable {
-  isFloat = false
 
+export class Color extends Displayable {
   static validate(o) {
     if (!o) {
       return null
@@ -25,10 +23,8 @@ export class Color extends Displayable {
     else if (objectType === 'number') {
       return Color.make(o * 255, o * 255, o * 255)
     } else if (Array.isArray(o)) {
-      if (o.length == 4) {
-        return Color.makeFloat(o[0], o[1], o[2], o[3])
-      } else if (o.length == 3) {
-        return Color.make(o[0], o[1], o[2])
+      if (o.length > 2) {
+        return Color.make(o[0], o[1], o[2], o.length > 3 ? o[3] : null)
       }
     }
     return null
@@ -36,40 +32,52 @@ export class Color extends Displayable {
 
   static parse(str) {
     let parsed = parse(str)
-    if (parsed.space === 'rgb') {
-      return Color.make(
-        parsed.values[0], parsed.values[0], parsed.values[0]
-      )
-    } else {
-      return Color.makeFloat(
-        parsed.values[0], parsed.values[0], parsed.values[0], parsed.alpha
-      )
-    }
+    return Color.make(
+      parsed.values[0],
+      parsed.values[0],
+      parsed.values[0],
+      parsed.space === 'rgb' ? null : parsed.alpha
+    )
   }
 
-  static make(r, g, b) {
+  static make(r, g, b, a) {
     let c = new Color
     c.red = { value: r | 0, rangeMin: 0, rangeMax: 255, step: 1 }
     c.green = { value: g | 0, rangeMin: 0, rangeMax: 255, step: 1 }
     c.blue = { value: b | 0, rangeMin: 0, rangeMax: 255, step: 1 }
+    if (a) {
+      c.alpha = a
+    }
     return c
   }
 
-  static makeFloat(r, g, b, a) {
-    let c = new Color
-    c.isFloat = true
-    c.red = r
-    c.blue = g
-    c.green = b
-    c.alpha = a
-    return c
+  get r() { return this.red.value }
+  get g() { return this.green.value }
+  get b() { return this.blue.value }
+  get a() { return 'alpha' in this ? this.alpha : 1.0 }
+
+  set r(value) { this.red.value = value }
+  set g(value) { this.green.value = value }
+  set b(value) { this.blue.value = value }
+  set a(value) {
+    if (!('alpha' in this)) {
+      return;
+    }
+    this.alpha = value
   }
 
-
-  get r() { return this.isFloat ? this.red : this.red.value * divisor }
-  get g() { return this.isFloat ? this.green : this.green.value * divisor }
-  get b() { return this.isFloat ? this.blue : this.blue.value * divisor }
-  get a() { return this.isFloat ? this.alpha : 1.0 }
+  static getFloat(col) {
+    let c = Color.validate(col)
+    if (!c) {
+      return null
+    }
+    return {
+      r: c.r * divisor,
+      g: c.g * divisor,
+      b: c.b * divisor,
+      a: c.a,
+    }
+  }
 
   _displayable = ColorComponent
   _params = ['red', 'green', 'blue', 'alpha']
