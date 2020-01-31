@@ -11,14 +11,14 @@ function getRgbaColor(c) {
 export class ColorComponent extends DisplayableComponent {
   constructor(props) {
     super(props)
-    this.handleChangeComplete = this.handleChangeComplete.bind(this)
+    // this.handleChangeComplete = this.handleChangeComplete.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.state = {
       color: {
         rgb: {
-          r: this.owner.r * 255,
-          g: this.owner.g * 255,
-          b: this.owner.b * 255,
+          r: this.owner.r,
+          g: this.owner.g,
+          b: this.owner.b,
           a: this.owner.a,
         }
       },
@@ -26,7 +26,11 @@ export class ColorComponent extends DisplayableComponent {
     }
   }
 
-  handleChangeComplete = (color) => {
+  // handleChangeComplete = (color) => {
+
+  // }
+
+  handleChange(color, event) {
     this.state.color.rgb = color.rgb
     this.setState(this.state)
 
@@ -34,12 +38,6 @@ export class ColorComponent extends DisplayableComponent {
     this.owner.g = color.rgb.g
     this.owner.b = color.rgb.b
     this.owner.a = color.rgb.a
-
-  }
-
-  handleChange(color, event) {
-    this.state.color.rgb = color.rgb
-    this.setState(this.state)
   }
 
   collapseChange(ev) {
@@ -79,9 +77,15 @@ export class ColorComponent extends DisplayableComponent {
 
   fullState() {
     return <SketchPicker
+      disableAlpha={!('alpha' in this.owner)} 
       color={this.state.color.rgb}
       onChange={this.handleChange}
-      onChangeComplete={this.handleChangeComplete}
+      // onChangeComplete={this.handleChangeComplete}
+      width='inherit'
+      style={{
+        padding: 'inherit'
+      }}
+      presetColors={[]}
     />
   }
 
@@ -99,7 +103,7 @@ export class ColorComponent extends DisplayableComponent {
           }
         }>
         {this.title}
-        <CollapseToggle open={false} callback={this.collapseChange.bind(this)} />
+        <CollapseToggle open={!this.state.collapsed} callback={this.collapseChange.bind(this)} />
       </div>
       {
         col ? null : this.fullState()

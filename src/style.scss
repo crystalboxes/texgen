@@ -94,7 +94,7 @@ strong.cursor {
   padding-left: 2px;
 }
 
-// sliders
+// Fix sliders
 $slider-height: 10px;
 $slider-active-color: #ddd;
 
@@ -118,5 +118,17 @@ $slider-active-color: #ddd;
   height: $slider-height !important;
 }
 .rc-slider-handle {
+  display: none !important;
+}
+
+// Fix color picker
+.sketch-picker {
+  padding: 4px !important;
+  border-radius: 0 !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  box-shadow: inherit !important;
+}
+
+.sketch-picker > .flexbox-fix:nth-child(3) {
   display: none !important;
 }
