@@ -21,8 +21,14 @@ class Grids {
       let currentX = xIncr * 0.5;
       for (let x = 0; x < xCount; x++) {
         if (st.random(1) < p.renderChance) {
-          let g = { { currentX, currentY }, { xIncr, yIncr }, 1, st.random(p.minDepth, p.maxDepth) };
-          g.draw(app.regularGridParams.spritePickChance);
+          let g;
+          g.center.x = currentX
+          g.center.y = currentY
+          g.scale.x = xIncr
+          g.scale.y = yIncr
+          g.size = 1
+          g.depth = st.random(p.minDepth, p.maxDepth)
+          g.draw(app.regularGridParams.spritePickChance)
         }
         currentX += xIncr;
       }
