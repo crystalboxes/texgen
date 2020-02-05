@@ -1,11 +1,14 @@
 import Color from '../core/Color.js'
-import Graphics from '../gl/Graphics.js'
+// import Graphics from '../gl/Graphics.js'
 import Framebuffer from '../gl/Framebuffer.js'
 import Image from '../gl/Image.js'
 import Script from '../core/Script.js'
 import Displayable from '../core/Displayable.js'
 import sampleImage from '../images/android.svg'
-let gr = Graphics
+// let gr = Graphics
+import Stripe from '../core/Stripe.js'
+let st = Stripe
+import Grids from '../behaviors/Grids.js'
 
 export class ParamsBlock extends Displayable {
   _className = 'displayable-struct column'
@@ -16,8 +19,8 @@ export class GridEffect extends ParamsBlock {
   xCount = 8
   yCount = 8
   countScaler = 1.0
-  renderChance = 0.5
-  spritePickChance = 0.5
+  renderChance = 1.0
+  spritePickChance = 0.0
   minDepth = 0.0
   maxDepth = 1.0
 }
@@ -69,51 +72,81 @@ export class MainParams extends ParamsBlock {
   colorize = new Colorizer
 }
 
+let instance = null
+
+function v3(c) {
+	return {
+		x: c.r / 255.0,
+		y: c.g / 255.0,
+		z: c.b / 255.0
+  }
+}
+
 export class TexGen extends Script {
   main = new MainParams
   effects =  [new KdGridEffect, new RandomGridEffect, new GridEffect]
 
   svg = null
   fb = new Framebuffer
+
+  _needsToDraw = true
+
+  get colorizer() {
+    return this.main.colorize
+  }
+
+  get regularGridParams() {
+    return this.effects[2]
+  }
+
+  getColorFromIntensity(brightness) {
+    if (!this.main.colorize.show) {
+      return Color.make(brightness)
+    }
+    let t = brightness / 255.0;
+    let a = v3(this.colorizer.a);
+    let b = v3(this.colorizer.b);
+    let c = v3(this.colorizer.c);
+    let d = v3(this.colorizer.d);
+  
+    let o = {
+      x: a.x + b.x * Math.cos(6.28318 * (c.x * t + d.x)),
+      y: a.y + b.y * Math.cos(6.28318 * (c.y * t + d.y)),
+      z: a.z + b.z * Math.cos(6.28318 * (c.z * t + d.z))
+    }
+    return Color.make(o.x * 255, o.y * 255, o.z * 255);
+  }
+
   onStart() {
     this.svg = Image.fromSvg(sampleImage, 256)
-    this.fb.allocate(gr.width, gr.height)
-    gr.circleResolution = 30
+    this.fb.allocate(st.getWidth(), st.getHeight())
+    st.setCircleResolution(30)
+    instance = this
+  }
+
+  static get app() {
+    return instance
   }
 
   onUpdate() {
-    let sin = Math.sin
-    gr.clearColor('#333')
-    this.fb.begin()
+    if (!this._needsToDraw) {
+      return
+    } 
+    this._needsToDraw = false
 
-    gr.clearColor(this.main.colorize.a)
-    let time = this.time.current
-    for (let i = 0; i < 900; i++) {
-      gr.setColor(
-        127 + 127 * sin(i * 0.01 + time),
-        127 + 127 * sin(i * 0.011 + time),
-        127 + 127 * sin(i * 0.012 + time),
-      )
-      gr.drawCircle(gr.width * 0.5 + 100 * sin(i * 0.02 + time), 150 + i, 50 + 40 * sin(i * 0.005 + time))
+    this.fb.begin()
+    st.setColor(128)
+    st.drawRectangle(0, 0, st.getWidth(), st.getHeight())
+    if (true) {
+      Grids.drawRegularGrid(this.regularGridParams, this)
     }
 
-    // gr.setColor({ r: 1.0, g: 0, b: 0, a: 1 })
-    // gr.drawRect(12, 20, 100, 100)
-
-    // gr.setColor({ r: 0.0, g: 1, b: 0, a: 1 })
-    // gr.circleResolution = 10
-    // gr.drawCircle(300, 300, 100)
-
-    // gr.setColor({ r: 0.0, g: 0.3, b: 0, a: 1 })
-    // gr.circleResolution = 30
-    // gr.drawCircle(400, 300, 100)
-
-    // gr.drawImage(this.svg, 200, 300)
     this.fb.end()
     this.fb.draw(0, 0)
   }
   
   onValidate(val) {
+    this._needsToDraw = true;
   }
 
   onDestroy() {

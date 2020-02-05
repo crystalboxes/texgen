@@ -41,6 +41,10 @@ export class Color extends Displayable {
   }
 
   static make(r, g, b, a) {
+    if (r && !g && !b) {
+      g = r
+      b = r
+    }
     let c = new Color
     c.red = { value: r | 0, rangeMin: 0, rangeMax: 255, step: 1 }
     c.green = { value: g | 0, rangeMin: 0, rangeMax: 255, step: 1 }
