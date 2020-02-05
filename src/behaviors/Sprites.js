@@ -1,5 +1,5 @@
 class Sprites {
-  drawRandom(x, y, w, h) {
+  static drawRandom(x, y, w, h) {
     // TODO
   }
 }

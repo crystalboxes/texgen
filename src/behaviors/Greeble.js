@@ -1,7 +1,6 @@
-import TexGen from './TexGen.js'
-let app = TexGen.app
 import Sprites from './Sprites.js'
-
+import Stripe from '../core/Stripe.js'
+let st = Stripe
 class Rect {
   x = 0
   y = 0
@@ -18,6 +17,15 @@ class Greeble {
   scale = { x: 1, y: 1 }
   size = 1
   depth = 1
+
+  clone() {
+    let g = new Greeble
+    g.center = {x: this.center.x, y: this.center.y}
+    g.scale = {x: this.scale.x, y: this.scale.y}
+    g.size = this.size
+    g.depth = this.depth
+    return g
+  }
 
   get() {
     let r = new Rect
@@ -41,8 +49,8 @@ class Greeble {
     g.depth = depth
     return g
   }
-  draw(spriteChance) {
-    if (!spriteChance) {
+  draw(spriteChance, app) {
+    if (spriteChance == null) {
       spriteChance = 0.5
     }
     let drawG = function(g) {
@@ -55,9 +63,9 @@ class Greeble {
       }
     };
   
-    if (doesClip()) {
+    if (this.doesClip()) {
       let r = this.get();
-      let g2 = this;
+      let g2 = this.clone()
       if (r.x + r.w > st.getWidth()) {
         g2.center.x = g2.center.x - st.getWidth();
       } else if (r.x < 0) {

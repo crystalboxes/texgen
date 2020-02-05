@@ -8,6 +8,8 @@ import sampleImage from '../images/android.svg'
 // let gr = Graphics
 import Stripe from '../core/Stripe.js'
 let st = Stripe
+import Grids from '../behaviors/Grids.js'
+
 export class ParamsBlock extends Displayable {
   _className = 'displayable-struct column'
 }
@@ -17,8 +19,8 @@ export class GridEffect extends ParamsBlock {
   xCount = 8
   yCount = 8
   countScaler = 1.0
-  renderChance = 0.5
-  spritePickChance = 0.5
+  renderChance = 1.0
+  spritePickChance = 0.0
   minDepth = 0.0
   maxDepth = 1.0
 }
@@ -99,20 +101,20 @@ export class TexGen extends Script {
 
   getColorFromIntensity(brightness) {
     if (!this.main.colorize.show) {
-      return ofColor(brightness)
+      return Color.make(brightness)
     }
     let t = brightness / 255.0;
-    let a = v3(app.colorizer.a);
-    let b = v3(app.colorizer.b);
-    let c = v3(app.colorizer.c);
-    let d = v3(app.colorizer.d);
+    let a = v3(this.colorizer.a);
+    let b = v3(this.colorizer.b);
+    let c = v3(this.colorizer.c);
+    let d = v3(this.colorizer.d);
   
     let o = {
       x: a.x + b.x * Math.cos(6.28318 * (c.x * t + d.x)),
       y: a.y + b.y * Math.cos(6.28318 * (c.y * t + d.y)),
       z: a.z + b.z * Math.cos(6.28318 * (c.z * t + d.z))
     }
-    return ofColor(o.x * 255, o.y * 255, o.z * 255);
+    return Color.make(o.x * 255, o.y * 255, o.z * 255);
   }
 
   onStart() {
@@ -135,7 +137,9 @@ export class TexGen extends Script {
     this.fb.begin()
     st.setColor(128)
     st.drawRectangle(0, 0, st.getWidth(), st.getHeight())
-
+    if (true) {
+      Grids.drawRegularGrid(this.regularGridParams, this)
+    }
 
     this.fb.end()
     this.fb.draw(0, 0)

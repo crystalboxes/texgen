@@ -23,7 +23,7 @@ class Stripe {
   }
 
   static seedRandom(seed) {
-    rng = new Prando(seed)
+    rng = new Prando(seed * 10000)
   }
 }
 
