@@ -1,6 +1,6 @@
 import Sprites from './Sprites.js'
-import Stripe from '../core/Stripe.js'
-let st = Stripe
+import API from '../core/API.js'
+let st = API
 class Rect {
   x = 0
   y = 0

@@ -6,8 +6,8 @@ import Script from '../core/Script.js'
 import Displayable from '../core/Displayable.js'
 import sampleImage from '../images/android.svg'
 // let gr = Graphics
-import Stripe from '../core/Stripe.js'
-let st = Stripe
+import API from '../core/API.js'
+let st = API
 import Grids from '../behaviors/Grids.js'
 import KdGrid from '../behaviors/KdGrid.js'
 
@@ -73,7 +73,7 @@ export class Colorizer extends Displayable {
 export class Toggles extends ParamsBlock {
   kd = false
   randomGrid = false
-  grid = false
+  grid = true
 }
 
 export class MainParams extends ParamsBlock {

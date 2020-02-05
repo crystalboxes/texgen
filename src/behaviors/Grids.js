@@ -1,7 +1,7 @@
-import Stripe from '../core/Stripe.js'
+import API from '../core/API.js'
 import Greeble from './Greeble.js'
 
-let st = Stripe
+let st = API
 
 function vec2(x, y) {
   return { x: x, y: y }

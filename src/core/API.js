@@ -2,9 +2,9 @@ import Graphics from '../gl/Graphics.js'
 import Prando from 'prando'
 
 const defaultSeed = 898
-let rng = new Prando(defaultSeed)
+var rng = new Prando(defaultSeed)
 
-class Stripe {
+class API {
   static Map(value, inputMin, inputMax, outputMin, outputMax) {
     return ((value - inputMin) / (inputMax - inputMin) * (outputMax - outputMin) + outputMin)
   }
@@ -22,7 +22,7 @@ class Stripe {
   }
 
   static Random(min, max) {
-    return Stripe.random(min, max)
+    return API.random(min, max)
   }
   static setColor = Graphics.setColor
   static drawRectangle = Graphics.drawRect
@@ -42,7 +42,7 @@ class Stripe {
       max = min
       min = 0
     }
-    return Stripe.Map(Math.random(), 0, 1, min, max) //rng.next(min, max)
+    return API.Map(Math.random(), 0, 1, min, max) //rng.next(min, max)
   }
 
   static seedRandom(seed) {
@@ -53,4 +53,4 @@ class Stripe {
   }
 }
 
-export default Stripe
+export default API
