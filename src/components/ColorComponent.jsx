@@ -3,6 +3,7 @@ import { DisplayableComponent } from './DisplayableComponent.jsx'
 import { SketchPicker } from 'react-color'
 import { Color } from '../core/Color.js'
 import { CollapseToggle } from './CollapseToggle.jsx'
+import Events from '../core/Events.js'
 
 function getRgbaColor(c) {
   return `rgba(${c.r}, ${c.g}, ${c.b}, ${1.0})`
@@ -11,8 +12,11 @@ function getRgbaColor(c) {
 export class ColorComponent extends DisplayableComponent {
   constructor(props) {
     super(props)
-    // this.handleChangeComplete = this.handleChangeComplete.bind(this)
     this.handleChange = this.handleChange.bind(this)
+    // console.log(props.title)
+
+    this.name = props.title
+
     this.state = {
       color: {
         rgb: {
@@ -26,12 +30,10 @@ export class ColorComponent extends DisplayableComponent {
     }
   }
 
-  // handleChangeComplete = (color) => {
-
-  // }
-
   handleChange(color, event) {
     this.state.color.rgb = color.rgb
+    Events.invoke(Events.Type.ParameterChanged, {name: this.name}, this.owner)
+
     this.setState(this.state)
 
     this.owner.r = color.rgb.r

@@ -9,6 +9,7 @@ import sampleImage from '../images/android.svg'
 import Stripe from '../core/Stripe.js'
 let st = Stripe
 import Grids from '../behaviors/Grids.js'
+import KdGrid from '../behaviors/KdGrid.js'
 
 export class ParamsBlock extends Displayable {
   _className = 'displayable-struct column'
@@ -31,6 +32,7 @@ export class KdGridEffect extends ParamsBlock {
   seed = 0
   spriteChance = 0.5
   iterations = { value: 7, rangeMin: 1, rangeMax: 12, step: 1 }
+  splitRange = {value: 0.05, rangeMin: 0.04, rangeMax: 0.5}
   renderChance = 1.0
   kdSplitChance = 1.0
   splitChance = 1.0
@@ -48,7 +50,8 @@ export class KdGridEffect extends ParamsBlock {
 export class RandomGridEffect extends ParamsBlock {
   seed = { value: 1000, rangeMin: 123, rangeMax: 9999 }
   greebleCount = { value: 100, rangeMin: 1, rangeMax: 10000 }
-  spriteChance = 1.0
+  scaleCount = 1.0
+  spriteChance = 0.0
   minDepth = 0
   maxDepth = 1.0
   minSize = 20
@@ -67,8 +70,15 @@ export class Colorizer extends Displayable {
   d = Color.make(255, 255, 255)
 }
 
+export class Toggles extends ParamsBlock {
+  kd = false
+  randomGrid = false
+  grid = false
+}
+
 export class MainParams extends ParamsBlock {
   resolution = { value: 1024, rangeMin: 0, rangeMax: 2048 }
+  toggles = new Toggles
   colorize = new Colorizer
 }
 
@@ -97,6 +107,14 @@ export class TexGen extends Script {
 
   get regularGridParams() {
     return this.effects[2]
+  }
+
+  get randomGridParams() {
+    return this.effects[1]
+  }
+
+  get kdGridParams() {
+    return this.effects[0]
   }
 
   getColorFromIntensity(brightness) {
@@ -137,8 +155,16 @@ export class TexGen extends Script {
     this.fb.begin()
     st.setColor(128)
     st.drawRectangle(0, 0, st.getWidth(), st.getHeight())
-    if (true) {
+    if (this.main.toggles.grid) {
       Grids.drawRegularGrid(this.regularGridParams, this)
+    }
+
+    if (this.main.toggles.randomGrid) {
+      Grids.drawRandomGrid(this.randomGridParams, this)
+    }
+
+    if (this.main.toggles.kd) {
+      KdGrid.draw(this.kdGridParams, this)
     }
 
     this.fb.end()
