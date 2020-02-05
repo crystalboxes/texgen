@@ -79,7 +79,7 @@ class Graphics {
   }
 
   static set circleResolution(value) {
-    rect.setCircleResolution(value)
+    rect.SetCircleResolution(value)
   }
 
   static drawCircle(x, y, r, color) {
@@ -99,6 +99,8 @@ class Graphics {
     // TODO move to a separate function (if it's necessary)
     gl.enable(gl.BLEND)
     gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
+
+    gl.disable(gl.DEPTH_TEST)
   }
 
   static get gl() {

@@ -1,8 +1,12 @@
 import Graphics from '../gl/Graphics.js'
-import Prando from 'prando'
+import seedrandom from 'seedrandom'
+import SimplexNoise from 'simplex-noise'
+import Color from '../core/Color.js'
+import Random from './Random.js'
 
-const defaultSeed = 898
-var rng = new Prando(defaultSeed)
+let lastSeed = 898
+var rand = seedrandom(lastSeed)
+var simplex = new SimplexNoise('noise')
 
 class API {
   static Map(value, inputMin, inputMax, outputMin, outputMax) {
@@ -14,42 +18,45 @@ class API {
   }
 
   static Noise(x, y) {
-    return Math.random()
+    if (y == null) {
+      y = 213
+    }
+    return API.Map(simplex.noise2D(x, y), -1, 1, 0, 1)
   }
 
-  static Color(r,g,b,a) {
-    return Color.make(r,g,b,a) 
+  static Color(r, g, b, a) {
+    return Color.make(r, g, b, a)
   }
 
   static Random(min, max) {
-    return API.random(min, max)
-  }
-  static setColor = Graphics.setColor
-  static drawRectangle = Graphics.drawRect
-  static drawImage = Graphics.drawImage
-  static drawCircle = Graphics.drawCircle
-  static DrawCircle = Graphics.drawCircle
-  static getWidth() { return Graphics.width }
-  static getHeight() { return Graphics.height }
-  static setCircleResolution(value) {
-    Graphics.circleResolution = value
-  }
-  static SetCircleResolution(value) {
-    Graphics.circleResolution = value
-  }
-  static random(min, max) {
     if (max == null) {
       max = min
       min = 0
     }
-    return API.Map(Math.random(), 0, 1, min, max) //rng.next(min, max)
+    return API.Map(rand(), 0, 1, min, max) // /* API.Map(Math.random(), 0, 1, min, max) // */rand.floatBetween(min, max)
   }
 
-  static seedRandom(seed) {
+  static MakeRandom(seed, numbersToStore) {
+    return new Random(seed, numbersToStore)
+  }
+
+  static DrawRectangle = Graphics.drawRect
+  static SetColor = Graphics.setColor
+  static DrawImage = Graphics.drawImage
+  static DrawCircle = Graphics.drawCircle
+  static DrawCircle = Graphics.drawCircle
+  static GetWidth() { return Graphics.width }
+  static GetHeight() { return Graphics.height }
+  static SetCircleResolution(value) {
+    Graphics.circleResolution = value
+  }
+
+  static SeedRandom(seed) {
+    lastSeed = seed
     if (seed < 1) {
-      seed *= 1000
+      seed = Math.floor(seed * 1000)
     }
-    rng = new Prando(seed)
+    rand = seedrandom(seed)
   }
 }
 

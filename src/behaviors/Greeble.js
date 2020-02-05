@@ -38,7 +38,7 @@ class Greeble {
 
   doesClip() {
     let r = this.get()
-    return r.x + r.w > st.getWidth() || r.x < 0 || r.y + r.h > st.getHeight() || r.y < 0
+    return r.x + r.w > st.GetWidth() || r.x < 0 || r.y + r.h > st.GetHeight() || r.y < 0
   }
 
   static /* Greeble  */fromRect(/* float */ x, /* float */ y, /* float */ w, /* float */ h, /* float */ depth) {
@@ -49,31 +49,34 @@ class Greeble {
     g.depth = depth
     return g
   }
-  draw(spriteChance, app) {
+  draw(spriteChance, app, randFunc) {
+    if (randFunc == null) {
+      randFunc = st.Random
+    }
     if (spriteChance == null) {
       spriteChance = 0.5
     }
     let drawG = function(g) {
-      st.setColor(app.getColorFromIntensity(g.depth * 255));
+      st.SetColor(app.getColorFromIntensity(g.depth * 255));
       let r = g.get();
-      if (spriteChance > st.random(1.0)) {
+      if (spriteChance > randFunc(1.0)) {
         Sprites.drawRandom(r.x, r.y, r.w, r.h);
       } else {
-        st.drawRectangle(r.x, r.y, r.w, r.h);
+        st.DrawRectangle(r.x, r.y, r.w, r.h);
       }
     };
   
     if (this.doesClip()) {
       let r = this.get();
       let g2 = this.clone()
-      if (r.x + r.w > st.getWidth()) {
-        g2.center.x = g2.center.x - st.getWidth();
+      if (r.x + r.w > st.GetWidth()) {
+        g2.center.x = g2.center.x - st.GetWidth();
       } else if (r.x < 0) {
-        g2.center.x = g2.center.x + st.getWidth();
-      } else if (r.y + r.h > st.getHeight()) {
-        g2.center.y = g2.center.y - st.getHeight();
+        g2.center.x = g2.center.x + st.GetWidth();
+      } else if (r.y + r.h > st.GetHeight()) {
+        g2.center.y = g2.center.y - st.GetHeight();
       } else if (r.y < 0) {
-        g2.center.y = g2.center.y + st.getHeight();
+        g2.center.y = g2.center.y + st.GetHeight();
       }
       drawG(g2);
     }

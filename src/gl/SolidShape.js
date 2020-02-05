@@ -14,7 +14,7 @@ class SolidShape {
     circle: { size: 0, buffer: null, resolution: defaultCircleResolution }
   }
 
-  setCircleResolution(value) {
+  SetCircleResolution(value) {
     this.shapes.circle.resolution = value > 0 ? value : defaultCircleResolution
     this.updateCircle()
   }

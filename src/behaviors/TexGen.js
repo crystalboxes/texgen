@@ -1,12 +1,12 @@
 import Color from '../core/Color.js'
-// import Graphics from '../gl/Graphics.js'
 import Framebuffer from '../gl/Framebuffer.js'
 import Image from '../gl/Image.js'
 import Script from '../core/Script.js'
 import Displayable from '../core/Displayable.js'
 import sampleImage from '../images/android.svg'
-// let gr = Graphics
 import API from '../core/API.js'
+
+
 let st = API
 import Grids from '../behaviors/Grids.js'
 import KdGrid from '../behaviors/KdGrid.js'
@@ -30,8 +30,8 @@ export class KdGridEffect extends ParamsBlock {
   optimize = false
   quadSplitFactor = 1.0
   seed = 0
-  spriteChance = 0.5
-  iterations = { value: 7, rangeMin: 1, rangeMax: 12, step: 1 }
+  spriteChance = 0.0
+  iterations = { value: 5, rangeMin: 1, rangeMax: 12, step: 1 }
   splitRange = {value: 0.05, rangeMin: 0.04, rangeMax: 0.5}
   renderChance = 1.0
   kdSplitChance = 1.0
@@ -71,9 +71,9 @@ export class Colorizer extends Displayable {
 }
 
 export class Toggles extends ParamsBlock {
-  kd = false
+  kd = true
   randomGrid = false
-  grid = true
+  grid = false
 }
 
 export class MainParams extends ParamsBlock {
@@ -137,8 +137,8 @@ export class TexGen extends Script {
 
   onStart() {
     this.svg = Image.fromSvg(sampleImage, 256)
-    this.fb.allocate(st.getWidth(), st.getHeight())
-    st.setCircleResolution(30)
+    this.fb.allocate(st.GetWidth(), st.GetHeight())
+    st.SetCircleResolution(30)
     instance = this
   }
 
@@ -153,8 +153,8 @@ export class TexGen extends Script {
     this._needsToDraw = false
 
     this.fb.begin()
-    st.setColor(128)
-    st.drawRectangle(0, 0, st.getWidth(), st.getHeight())
+    st.SetColor(128)
+    st.DrawRectangle(0, 0, st.GetWidth(), st.GetHeight())
     if (this.main.toggles.grid) {
       Grids.drawRegularGrid(this.regularGridParams, this)
     }
