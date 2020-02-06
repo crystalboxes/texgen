@@ -2,6 +2,7 @@ import React, { Component } from "react"
 import { ResizableBox } from "react-resizable"
 import Draggable from 'react-draggable'
 import { CollapseToggle } from './CollapseToggle.jsx'
+import { Scrollbars } from 'react-custom-scrollbars';
 
 export class Window extends Component {
   constructor(props) {
@@ -10,7 +11,7 @@ export class Window extends Component {
     this.width = props.width || defaultWindowSize
     this.height = props.height || defaultWindowSize
     this.title = props.title || '';
-    this.state = { showParameters: true, currentWidth: this.width }
+    this.state = { showParameters: true, currentWidth: this.width, currentHeight: this.height }
   }
 
   handleOpenCallback(value) {
@@ -22,18 +23,22 @@ export class Window extends Component {
     return this.state.showParameters
       ?
       <ResizableBox
-        width={this.width * 1}
-        height={this.height * 1}
+        width={this.state.currentWidth * 1}
+        height={this.state.currentHeight * 1}
         className='window'
         handleSize={[10, 10]}
         onResize={this.handleOnResize.bind(this)}
-      >{this.props.children}
+      >
+        <Scrollbars
+          style={{ width: this.state.currentWidth + 'px', height: this.state.currentHeight + 'px' }}
+        >{this.props.children}</Scrollbars>
       </ResizableBox>
       : ''
   }
 
   handleOnResize(_, data) {
     this.state.currentWidth = data.size.width
+    this.state.currentHeight = data.size.height
     this.setState(this.state)
   }
 
