@@ -2,10 +2,12 @@ import {DisplayableComponent} from '../components/DisplayableComponent.jsx'
 
 export class Displayable {
   get className() {
-    return this._className
+    return this.__className
   }
 
-  _displayable = DisplayableComponent
-  _className = 'displayable-struct'
+  __displayable = DisplayableComponent
+  __collapsable = false
+  __className = 'displayable-struct'
+  __displayTitle = ''
 }
 export default Displayable

@@ -1,35 +1,28 @@
-import React, { Component } from "react"
+import React from "react"
 import { DisplayableComponent } from './DisplayableComponent.jsx'
-import Draggable from 'react-draggable'
-import { CollapseToggle } from './CollapseToggle.jsx'
+import { Window } from "./Window.jsx"
 
 export class ScriptComponent extends DisplayableComponent {
   constructor(props) {
     super(props)
-    this.state = { showParameters: true }
-  }
+    let gui = this.owner.__gui
+    let typeofGui = typeof gui
+    this.width = 200
+    this.height = 300
+    this.x = 0
+    this.y = 0
 
-  handleOpenCallback(value) {
-    this.setState({ showParameters: value })
-  }
-
-  getParamsContainer() {
-    return this.state.showParameters
-      ? <div className='paramsContainer'>{this.getElements()}</div>
-      : ''
+    if (typeofGui === 'object') {
+      this.width = gui.width || this.width
+      this.height = gui.height || this.height
+      this.x = gui.pos.x || this.x
+      this.y = gui.pos.y || this.y
+    }
   }
 
   render() {
-    return <Draggable handle="strong">
-      <div className={this.owner._className}>
-        <strong className="cursor">
-          <div>
-            <CollapseToggle className='collapse-button' callback={this.handleOpenCallback.bind(this)} />
-            Parameters
-          </div>
-        </strong>
-        {this.getParamsContainer()}
-      </div>
-    </Draggable>
+    return <Window width={this.width} height={this.height} pos={{x: this.x, y: this.y}} title="Parameters">
+      <div>{this.getElements()}</div>
+    </Window>
   }
 }

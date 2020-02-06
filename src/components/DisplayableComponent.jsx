@@ -4,6 +4,7 @@ import {
   Toggle
 } from './FieldRepresentation.jsx'
 import { NumberField } from './NumberField.jsx'
+import { Collapse } from "./Collapsable.jsx"
 
 export class DisplayableComponent extends Component {
   constructor(props) {
@@ -28,7 +29,7 @@ export class DisplayableComponent extends Component {
       })
 
     let isDisplayable = function (o) {
-      return typeof o === 'object' && '_displayable' in o
+      return typeof o === 'object' && '__displayable' in o
     }
 
     return entries
@@ -106,8 +107,8 @@ export class DisplayableComponent extends Component {
             }
             return elems
           case 'object':
-            if ('_displayable' in v.value) {
-              return addElement(v.value._displayable, { key: keyId, title: v.name, instance: v.value })
+            if ('__displayable' in v.value) {
+              return addElement(v.value.__displayable, { key: keyId, title: v.name, instance: v.value })
             } else {
               return addElement(DisplayableComponent, { key: keyId, title: v.name, instance: v.value })
             }
@@ -118,17 +119,38 @@ export class DisplayableComponent extends Component {
   }
 
   getTitle() {
-    if (this.title) {
-      return <h3>{this.title}</h3>
+    if (this.owner.__displayTitle.length > 0) {
+      return <h3>{this.owner.__displayTitle}</h3>
     } else {
       return null;
     }
   }
 
+  get collapseTitle() {
+    if (this.owner.__displayTitle.length == 0) {
+      return this.props.title
+    } else {
+      return this.owner.__displayTitle
+    }
+  }
+
   render() {
-    if (!('_className' in this.owner)) {
+    if (!('__className' in this.owner)) {
       console.error("something is wrong")
     }
-    return <div className={this.owner._className}>{this.getElements()}</div>
+    let isCollapsable = false
+    let collapsed = false
+    let cType = typeof this.owner.__collapsable
+    if(cType === 'boolean') {
+      isCollapsable = this.owner.__collapsable
+    } else if (cType === 'object') {
+      collapsed = this.owner.__collapsable.collapsed
+      isCollapsable = true
+    }
+    if (isCollapsable) {
+      return <Collapse title={this.collapseTitle} collapsed={collapsed} containerClassName={this.owner.__className}>{this.getElements()}</Collapse>
+    } else {
+      return <div className={this.owner.__className}>{this.getTitle()}{this.getElements()}</div>
+    }
   }
 }

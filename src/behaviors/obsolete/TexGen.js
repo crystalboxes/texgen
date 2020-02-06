@@ -3,16 +3,17 @@ import Framebuffer from '../../gl/Framebuffer.js'
 import Image from '../../gl/Image.js'
 import Script from '../../core/Script.js'
 import Displayable from '../../core/Displayable.js'
-import sampleImage from '../images/android.svg'
+import sampleImage from '../../images/android.svg'
 import API from '../../core/API.js'
-
+import GUI from '../../core/GUI.js'
 
 let st = API
-import Grids from '../behaviors/Grids.js'
-import KdGrid from '../behaviors/KdGrid.js'
+import Grids from './Grids.js'
+import KdGrid from './KdGrid.js'
 
 export class ParamsBlock extends Displayable {
-  _className = 'displayable-struct column'
+  __className = 'displayable-struct column'
+  __collapsable = { collapsed: false }
 }
 
 export class GridEffect extends ParamsBlock {
@@ -24,6 +25,9 @@ export class GridEffect extends ParamsBlock {
   spritePickChance = 0.0
   minDepth = 0.0
   maxDepth = 1.0
+
+  __displayTitle = 'Grid Effect'
+
 }
 
 export class KdGridEffect extends ParamsBlock {
@@ -32,7 +36,7 @@ export class KdGridEffect extends ParamsBlock {
   seed = 0
   spriteChance = 0.0
   iterations = { value: 5, rangeMin: 1, rangeMax: 12, step: 1 }
-  splitRange = {value: 0.05, rangeMin: 0.04, rangeMax: 0.5}
+  splitRange = { value: 0.05, rangeMin: 0.04, rangeMax: 0.5 }
   renderChance = 1.0
   kdSplitChance = 1.0
   splitChance = 1.0
@@ -45,6 +49,9 @@ export class KdGridEffect extends ParamsBlock {
   circleRadiusSize = 1.0
   minDepth = 0
   maxDepth = 1.0
+
+  __displayTitle = 'k-d Grid'
+
 }
 
 export class RandomGridEffect extends ParamsBlock {
@@ -60,6 +67,9 @@ export class RandomGridEffect extends ParamsBlock {
   minScaleY = 0.1
   maxScaleX = { value: 1.5, rangeMax: 10.0, step: 0.1 }
   maxScaleY = { value: 1.5, rangeMax: 10.0, step: 0.1 }
+
+  __displayTitle = 'Random Grid'
+
 }
 
 export class Colorizer extends Displayable {
@@ -68,36 +78,50 @@ export class Colorizer extends Displayable {
   b = Color.make(255, 255, 255)
   c = Color.make(0, 0, 0)
   d = Color.make(255, 255, 255)
+
+  __displayTitle = 'Colorizer'
+  __collapsable = {collapsed: true}
 }
 
 export class Toggles extends ParamsBlock {
   kd = true
   randomGrid = false
   grid = false
+  __collapsable = false
 }
 
 export class MainParams extends ParamsBlock {
   resolution = { value: 1024, rangeMin: 0, rangeMax: 2048 }
   toggles = new Toggles
   colorize = new Colorizer
+
+  __collapsable = false
 }
 
 let instance = null
 
 function v3(c) {
-	return {
-		x: c.r / 255.0,
-		y: c.g / 255.0,
-		z: c.b / 255.0
+  return {
+    x: c.r / 255.0,
+    y: c.g / 255.0,
+    z: c.b / 255.0
   }
 }
 
 export class TexGen extends Script {
   main = new MainParams
-  effects =  [new KdGridEffect, new RandomGridEffect, new GridEffect]
+  effects = [new KdGridEffect, new RandomGridEffect, new GridEffect]
 
   svg = null
   fb = new Framebuffer
+
+  __gui = {
+    type: GUI.PanelType.Window,
+    width: 156,
+    height: 500,
+    pos: { x: 10, y: 10 }
+  }
+
 
   _needsToDraw = true
 
@@ -126,7 +150,7 @@ export class TexGen extends Script {
     let b = v3(this.colorizer.b);
     let c = v3(this.colorizer.c);
     let d = v3(this.colorizer.d);
-  
+
     let o = {
       x: a.x + b.x * Math.cos(6.28318 * (c.x * t + d.x)),
       y: a.y + b.y * Math.cos(6.28318 * (c.y * t + d.y)),
@@ -149,7 +173,7 @@ export class TexGen extends Script {
   onUpdate() {
     if (!this._needsToDraw) {
       return
-    } 
+    }
     this._needsToDraw = false
 
     this.fb.begin()
@@ -170,7 +194,7 @@ export class TexGen extends Script {
     this.fb.end()
     this.fb.draw(0, 0)
   }
-  
+
   onValidate(val) {
     this._needsToDraw = true;
   }

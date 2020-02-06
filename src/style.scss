@@ -35,6 +35,10 @@ strong.cursor {
   font-weight: normal;
 }
 
+.not-collapsed > div {
+  padding-bottom: 5px;
+}
+
 .collapse-button {
   background: none;
 	color: inherit;
@@ -51,7 +55,7 @@ strong.cursor {
 .script-parameters, .window {
   background-color: hsla($hue + $hue * 0.08, $sat * 0.44, $parameters-brightness, 0.6) !important;
   left:0;
-  padding: 0 0 2px 2px;
+  padding: 2px 0 2px 2px;
   position: fixed;
   top:0;
 }
@@ -66,12 +70,7 @@ strong.cursor {
   width: 145px;
 }
 
-.param-field {
-  max-width: 200px;
-  padding-bottom: 5px;
-}
-
-.noselect {
+@mixin no-select {
   -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
      -khtml-user-select: none; /* Konqueror HTML */
@@ -79,6 +78,16 @@ strong.cursor {
         -ms-user-select: none; /* Internet Explorer/Edge */
             user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome, Opera and Firefox */
+}
+
+.param-field {
+  max-width: 200px;
+  padding-bottom: 5px;
+  @include no-select;
+}
+
+.noselect {
+  @include no-select;
 }
 
 .color-comp {
@@ -151,6 +160,9 @@ $slider-active-color: #ddd;
   cursor: se-resize;
 }
 
-.react-draggable.react-draggable-dragged {
+.react-draggable {
+  position: absolute;
   width: 0;
+  top:0;
+  left:0;
 }

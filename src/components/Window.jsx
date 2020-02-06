@@ -1,28 +1,32 @@
 import React, { Component } from "react"
 import { ResizableBox } from "react-resizable"
 import Draggable from 'react-draggable'
-import { CollapseToggle } from './CollapseToggle.jsx'
-import { Scrollbars } from 'react-custom-scrollbars';
+import { Scrollbars } from 'react-custom-scrollbars'
+import { Collapse } from "./Collapsable.jsx";
 
 export class Window extends Component {
   constructor(props) {
     super(props)
     const defaultWindowSize = 200
-    this.width = props.width || defaultWindowSize
-    this.height = props.height || defaultWindowSize
+    let width = props.width || defaultWindowSize
+    let height = props.height || defaultWindowSize
     this.title = props.title || '';
-    this.state = { showParameters: true, currentWidth: this.width, currentHeight: this.height }
-  }
-
-  handleOpenCallback(value) {
-    this.state.showParameters = value
-    this.setState(this.state)
+    let x =  0
+    let y =  0
+    if (props.pos != null) {
+      x = props.pos.x
+      y = props.pos.y
+    }
+    this.onResizeCallback = props.onResize
+    this.state = {
+      currentWidth: width,
+      currentHeight: height,
+      pos: { x: x, y: y }
+    }
   }
 
   get content() {
-    return this.state.showParameters
-      ?
-      <ResizableBox
+    return <ResizableBox
         width={this.state.currentWidth * 1}
         height={this.state.currentHeight * 1}
         className='window'
@@ -33,28 +37,27 @@ export class Window extends Component {
           style={{ width: this.state.currentWidth + 'px', height: this.state.currentHeight + 'px' }}
         >{this.props.children}</Scrollbars>
       </ResizableBox>
-      : ''
   }
 
   handleOnResize(_, data) {
     this.state.currentWidth = data.size.width
     this.state.currentHeight = data.size.height
     this.setState(this.state)
+    if (this.onResizeCallback != null) {
+      this.onResizeCallback({
+        width: this.state.currentWidth,
+        height: this.state.currentHeight
+      })
+    }
   }
 
   render() {
-    return <Draggable handle="strong">
+    return <Draggable defaultPosition={this.state.pos}  handle=".handle">
       <div>
         <div className='params' style={{ width: this.state.currentWidth + 'px' }}>
-          <strong className="cursor">
-            <div>
-              <CollapseToggle
-                className='collapse-button'
-                callback={this.handleOpenCallback.bind(this)} />
-              {this.title}
-            </div>
-          </strong>
-          {this.content}
+          <Collapse className='handle' title={this.title}>
+            {this.content}
+          </Collapse>
         </div>
       </div>
     </Draggable>

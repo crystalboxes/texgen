@@ -83,7 +83,7 @@ export class Color extends Displayable {
     }
   }
 
-  _displayable = ColorComponent
+  __displayable = ColorComponent
   _params = ['red', 'green', 'blue', 'alpha']
 }
 
