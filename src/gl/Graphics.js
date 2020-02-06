@@ -24,11 +24,11 @@ class Graphics {
       return
     }
     // TODO handle resolution correctly
-    canvas.width = canvas.clientWidth
-    canvas.height = canvas.clientHeight
+    // canvas.width = canvas.clientWidth
+    // canvas.height = canvas.clientHeight
 
-    canvas.style.width = canvas.width / window.devicePixelRatio + 'px'
-    canvas.style.height = canvas.height / window.devicePixelRatio + 'px'
+    // canvas.style.width = canvas.width / window.devicePixelRatio + 'px'
+    // canvas.style.height = canvas.height / window.devicePixelRatio + 'px'
 
     Graphics.setViewport()
     rect.init()

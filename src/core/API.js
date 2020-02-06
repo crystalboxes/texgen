@@ -40,6 +40,8 @@ class API {
     return new Random(seed, numbersToStore)
   }
 
+  static ClearColor = Graphics.clearColor
+
   static DrawRectangle = Graphics.drawRect
   static SetColor = Graphics.setColor
   static DrawImage = Graphics.drawImage

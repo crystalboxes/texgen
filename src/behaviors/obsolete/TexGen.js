@@ -1,10 +1,10 @@
-import Color from '../core/Color.js'
-import Framebuffer from '../gl/Framebuffer.js'
-import Image from '../gl/Image.js'
-import Script from '../core/Script.js'
-import Displayable from '../core/Displayable.js'
+import Color from '../../core/Color.js'
+import Framebuffer from '../../gl/Framebuffer.js'
+import Image from '../../gl/Image.js'
+import Script from '../../core/Script.js'
+import Displayable from '../../core/Displayable.js'
 import sampleImage from '../images/android.svg'
-import API from '../core/API.js'
+import API from '../../core/API.js'
 
 
 let st = API

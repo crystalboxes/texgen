@@ -1,4 +1,4 @@
-import API from '../core/API.js'
+import API from '../../core/API.js'
 import Greeble from './Greeble.js'
 
 let st = API

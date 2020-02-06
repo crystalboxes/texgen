@@ -1,5 +1,5 @@
 import Sprites from './Sprites.js'
-import API from '../core/API.js'
+import API from '../../core/API.js'
 let st = API
 class Rect {
   x = 0
