@@ -13,8 +13,6 @@ export class ColorComponent extends DisplayableComponent {
   constructor(props) {
     super(props)
     this.handleChange = this.handleChange.bind(this)
-    // console.log(props.title)
-
     this.name = props.title
 
     this.state = {

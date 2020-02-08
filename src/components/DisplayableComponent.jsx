@@ -9,10 +9,13 @@ import { Collapse } from "./Collapsable.jsx"
 export class DisplayableComponent extends Component {
   constructor(props) {
     super(props)
-    this.owner = props.instance
     if ('title' in props) {
       this.title = props.title
     }
+  }
+  
+  get owner() {
+    return this.props.owner
   }
 
   getParsedParameters() {
@@ -102,15 +105,15 @@ export class DisplayableComponent extends Component {
             for (let element of v.value) {
               elems.push(addElement(DisplayableComponent, {
                 key: keyId + i++,
-                instance: element
+                owner: element
               }))
             }
             return elems
           case 'object':
             if ('__displayable' in v.value) {
-              return addElement(v.value.__displayable, { key: keyId, title: v.name, instance: v.value })
+              return addElement(v.value.__displayable, { key: keyId, title: v.name, owner: v.value })
             } else {
-              return addElement(DisplayableComponent, { key: keyId, title: v.name, instance: v.value })
+              return addElement(DisplayableComponent, { key: keyId, title: v.name, owner: v.value })
             }
           default:
             return addElement(FieldRepresentation, attribs)

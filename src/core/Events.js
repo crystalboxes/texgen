@@ -3,24 +3,34 @@ import stringify from 'json-stable-stringify'
 const defaultHashStr = '0'
 class Events {
   static Type = {
-    ParameterChanged: 0
+    ParameterChanged: 0,
+    CanvasResized: 1,
   }
   static eventListeners = {}
 
-  static invoke(eventType, ev, targetObject) {
+  static registerEventType(name) {
+    if (!(name in Events.Type)) {
+      Events.Type[name] = Object.entries(Events.Type).length
+    }
+  }
+
+  static invoke(eventType, data, targetObject) {
     let invokeListenerFunction = function (fn) {
       if (typeof fn === 'object' && Array.isArray(fn)) {
         let invokableFunction = fn[0]
         if (fn.length == 2) {
           invokableFunction = fn[0].bind(fn[1])
         }
-        invokableFunction(ev)
+        invokableFunction(data)
       } else {
-        fn(ev)
+        fn(data)
       }
     }
     let listeners = Events.eventListeners[eventType]
     if (listeners) {
+      if (!(defaultHashStr in listeners)) {
+        listeners[defaultHashStr] = []
+      }
       for (let fn of listeners[defaultHashStr]) {
         invokeListenerFunction(fn)
       }

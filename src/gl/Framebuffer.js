@@ -7,7 +7,20 @@ class Framebuffer extends Image {
     this.fb = null
   }
 
+  release() {
+    if (this.texture != null) {
+      Graphics.gl.deleteTexture(this.texture)
+      this.texture = null
+    }
+    if (this.fb != null) {
+      Graphics.gl.deleteFramebuffer(this.fb)
+      this.fb = null
+    }
+  }
+
   allocate(width, height) {
+    this.release()
+
     this.width = width
     this.height = height
 
@@ -40,7 +53,6 @@ class Framebuffer extends Image {
   }
 
   begin() {
-    
     let gl = Graphics.gl
     Graphics.currentFbo = this
     gl.bindFramebuffer(gl.FRAMEBUFFER, this.fb);
@@ -52,6 +64,35 @@ class Framebuffer extends Image {
     Graphics.currentFbo = null
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     Graphics.setViewport()
+  }
+
+  dumpImage() {
+    let gl = Graphics.gl
+    let width = this.width
+    let height = this.height
+    // Create a framebuffer backed by the texture
+    gl.bindFramebuffer(gl.FRAMEBUFFER, this.fb);
+
+    // Read the contents of the framebuffer
+    var data = new Uint8Array(width * height * 4);
+    gl.readPixels(0, 0, width, height, gl.RGBA, gl.UNSIGNED_BYTE, data);
+    gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+
+    // Create a 2D canvas to store the result 
+    var canvas = document.createElement('canvas')
+    canvas.width = width
+    canvas.height = height
+    var context = canvas.getContext('2d')
+
+    // Copy the pixels to a 2D canvas
+    var imageData = context.createImageData(width, height)
+    imageData.data.set(data)
+    context.putImageData(imageData, 0, 0)
+
+    var img = new Image()
+    img.src = canvas.toDataURL()
+    this.img = img
+    canvas.outerHTML = "";
   }
 }
 

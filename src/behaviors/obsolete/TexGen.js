@@ -10,6 +10,11 @@ import GUI from '../../core/GUI.js'
 let st = API
 import Grids from './Grids.js'
 import KdGrid from './KdGrid.js'
+import Graphics from '../../gl/Graphics.js'
+import Label from '../../core/Label.js'
+import Button from '../../core/Button.js'
+
+import FileSaver from 'file-saver'
 
 export class ParamsBlock extends Displayable {
   __className = 'displayable-struct column'
@@ -80,7 +85,7 @@ export class Colorizer extends Displayable {
   d = Color.make(255, 255, 255)
 
   __displayTitle = 'Colorizer'
-  __collapsable = {collapsed: true}
+  __collapsable = { collapsed: true }
 }
 
 export class Toggles extends ParamsBlock {
@@ -90,8 +95,18 @@ export class Toggles extends ParamsBlock {
   __collapsable = false
 }
 
+function getResolution(val) {
+  return Math.pow(2, val);
+}
+
+function getResolutionLabel(val) {
+  return "Resolution: " + getResolution(val)
+}
+
 export class MainParams extends ParamsBlock {
-  resolution = { value: 1024, rangeMin: 0, rangeMax: 2048 }
+  resolutionLabel = new Label(getResolutionLabel(11))
+  size = { value: 11, rangeMin: 1, rangeMax: 13, step: 1 }
+  render = new Button
   toggles = new Toggles
   colorize = new Colorizer
 
@@ -109,6 +124,11 @@ function v3(c) {
 }
 
 export class TexGen extends Script {
+  constructor() {
+    super()
+    this.__canvasParameters.type = GUI.PanelType.Window
+  }
+
   main = new MainParams
   effects = [new KdGridEffect, new RandomGridEffect, new GridEffect]
 
@@ -121,7 +141,6 @@ export class TexGen extends Script {
     height: 500,
     pos: { x: 10, y: 10 }
   }
-
 
   _needsToDraw = true
 
@@ -159,11 +178,25 @@ export class TexGen extends Script {
     return Color.make(o.x * 255, o.y * 255, o.z * 255);
   }
 
+  get res() {
+    return getResolution(this.main.size.value)
+  }
+
+  render() {
+    console.log('rendering')
+    this.fb.dumpImage()
+    FileSaver.saveAs(this.fb.img.src, 'img.png')
+    
+  }
+
   onStart() {
     this.svg = Image.fromSvg(sampleImage, 256)
-    this.fb.allocate(st.GetWidth(), st.GetHeight())
+
+    this.fb.allocate(this.res,this.res)
     st.SetCircleResolution(30)
     instance = this
+
+    this.main.render.onClick = this.render.bind(this)
   }
 
   static get app() {
@@ -192,13 +225,23 @@ export class TexGen extends Script {
     }
 
     this.fb.end()
-    this.fb.draw(0, 0)
+    this.fb.draw(0, 0, Graphics.width, Graphics.height)
   }
-
+  
   onValidate(val) {
     this._needsToDraw = true;
+    let res = getResolution(this.main.size.value)
+    if (res != this.fb.width) {
+      this.fb.allocate(res, res)
+    }
+    this.main.resolutionLabel.text = getResolutionLabel(this.main.size.value)
   }
 
   onDestroy() {
   }
+
+  onResize(width, height) {
+    this._needsToDraw = true;
+  }
+
 }

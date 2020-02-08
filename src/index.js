@@ -13,10 +13,13 @@ let instance = null
 if (renderApp) {
   instance = new TexGen
   let screenSize = 1280
-  var app = new App(instance, {
-    width: screenSize,
-    height: screenSize, id: 'app-display'
-  })
+  let params = instance.__canvasParameters
+  params.pos.x = 212
+  params.pos.y = 6
+  instance.__canvasParameters.width = screenSize
+  instance.__canvasParameters.height = screenSize
+
+  var app = new App(instance)
   comp = <AppComponent instance={app} />
 }
 

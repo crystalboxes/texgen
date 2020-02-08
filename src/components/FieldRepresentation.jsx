@@ -1,5 +1,14 @@
 import React, { Component } from "react"
 import Events from "../core/Events"
+import { DisplayableComponent } from "./DisplayableComponent.jsx";
+
+function formatLabelName(val) {
+  // https://stackoverflow.com/a/4149393
+  return val // insert a space before all caps
+    .replace(/([A-Z])/g, ' $1')
+    // uppercase the first character
+    .replace(/^./, function (str) { return str.toUpperCase(); })
+}
 
 export class FieldRepresentation extends Component {
   constructor(props) {
@@ -9,7 +18,7 @@ export class FieldRepresentation extends Component {
     this.state = {
       value: props.default
     }
-    this.handleInputChange = this.handleInputChange.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this)
   }
   render() {
     return <div className="param-field">
@@ -18,12 +27,7 @@ export class FieldRepresentation extends Component {
   }
 
   get labelName() {
-    // https://stackoverflow.com/a/4149393
-    return this.name
-      // insert a space before all caps
-      .replace(/([A-Z])/g, ' $1')
-      // uppercase the first character
-      .replace(/^./, function (str) { return str.toUpperCase(); })
+    return formatLabelName(this.name)
   }
 
   handleInputChange(event) {
@@ -39,8 +43,8 @@ export class FieldRepresentation extends Component {
     } else {
       this.owner[this.name] = value
     }
-    
-    Events.invoke(Events.Type.ParameterChanged, {name: this.name}, this.owner)
+
+    Events.invoke(Events.Type.ParameterChanged, { name: this.name }, this.owner)
 
     this.setState({
       value: value
@@ -55,6 +59,32 @@ export class Toggle extends FieldRepresentation {
         name={this.name}
         type="checkbox"
         checked={this.state.value}
+        onChange={this.handleInputChange}
+      />
+      <label htmlFor={this.name}>{this.labelName}</label>
+    </div>
+  }
+}
+
+export class ButtonComponent extends Component {
+  constructor(props) {
+    super(props)
+    this.owner = props.owner
+    this.handleInputChange = this.handleInputChange.bind(this)
+    this.name = this.props.title
+    this.labelName = formatLabelName(this.props.title)
+  }
+  handleInputChange(_) {
+    this.setState({})
+    this.owner.onClick()
+  }
+
+  render() {
+    return <div className="param-field">
+      <input
+        name={this.name}
+        type="checkbox"
+        checked={false}
         onChange={this.handleInputChange}
       />
       <label htmlFor={this.name}>{this.labelName}</label>

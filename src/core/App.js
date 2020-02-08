@@ -8,14 +8,14 @@ class App {
     deltaTime: 0
   }
 
-  constructor(script, settings) {
+  constructor(script) {
     this.script = script
-    this.settings = settings
     // since the DOM is generated on React's 'render' call constructor will do nothing
   }
 
   onApplicationStart() {
-    Graphics.init(document.getElementById('app-display'))
+    
+    Graphics.init(document.getElementById(this.script.__canvasParameters.id))
     // initialize gl context here
     this.script.time = this.time
 

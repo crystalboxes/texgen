@@ -1,26 +1,46 @@
 import React, { Component } from "react"
+import Events from "../core/Events"
+import Graphics from "../gl/Graphics"
 
 export class CanvasComponent extends Component {
   constructor(props) {
     super(props)
     this.id = props.id
-    this.width = props.width
-    this.height = props.height
+    this.state = {
+      width: props.width,
+      height: props.height
+    }
+
+    Events.addEventListener(
+      Events.Type.CanvasResized,
+      this.onCanvasResized.bind(this)
+    )
   }
-  get renderWidth() {
-    return this.width / window.devicePixelRatio
+
+  static get pixelRatio() {
+    return window.devicePixelRatio
   }
-  get renderHeigth() {
-    return this.height / window.devicePixelRatio
+
+  static getRenderSize(dim) {
+    return dim / CanvasComponent.pixelRatio
   }
+
+  onCanvasResized(data) {
+    data.width *= CanvasComponent.pixelRatio
+    data.height *= CanvasComponent.pixelRatio
+    this.setState({ width: data.width, height: data.height })
+    Graphics.setViewport()
+  }
+
+
   render() {
     return <canvas
       id={this.id}
-      width={this.width}
-      height={this.height}
+      width={this.state.width}
+      height={this.state.height}
       style={{
-        width: this.renderWidth + 'px',
-        height: this.renderHeigth + 'px'
+        width: CanvasComponent.getRenderSize(this.state.width) + 'px',
+        height: CanvasComponent.getRenderSize(this.state.height) + 'px'
       }}></canvas>
   }
 }

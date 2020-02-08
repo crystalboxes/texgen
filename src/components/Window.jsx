@@ -4,6 +4,9 @@ import Draggable from 'react-draggable'
 import { Scrollbars } from 'react-custom-scrollbars'
 import { Collapse } from "./Collapsable.jsx";
 
+// Props:
+// width, height, title, pos{x,y}, onResize
+
 export class Window extends Component {
   constructor(props) {
     super(props)
@@ -34,7 +37,7 @@ export class Window extends Component {
         onResize={this.handleOnResize.bind(this)}
       >
         <Scrollbars
-          style={{ width: this.state.currentWidth + 'px', height: this.state.currentHeight + 'px' }}
+          style={{ width: this.state.currentWidth + 'px', height: (this.state.currentHeight + 4) + 'px' }}
         >{this.props.children}</Scrollbars>
       </ResizableBox>
   }
