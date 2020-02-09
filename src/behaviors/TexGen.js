@@ -1,20 +1,20 @@
-import Color from '../../core/Color.js'
-import Framebuffer from '../../gl/Framebuffer.js'
-import Image from '../../gl/Image.js'
-import Script from '../../core/Script.js'
-import Displayable from '../../core/Displayable.js'
-import sampleImage from '../../images/android.svg'
-import API from '../../core/API.js'
-import GUI from '../../core/GUI.js'
+import Color from '../core/Color.js'
+import Framebuffer from '../gl/Framebuffer.js'
+import Image from '../gl/Image.js'
+import Script from '../core/Script.js'
+import Displayable from '../core/Displayable.js'
+import API from '../core/API.js'
+import GUI from '../core/GUI.js'
 
 let st = API
 import Grids from './Grids.js'
 import KdGrid from './KdGrid.js'
-import Graphics from '../../gl/Graphics.js'
-import Label from '../../core/Label.js'
-import Button from '../../core/Button.js'
+import Graphics from '../gl/Graphics.js'
+import Label from '../core/Label.js'
+import Button from '../core/Button.js'
 
 import FileSaver from 'file-saver'
+import Images from './Images.js'
 
 export class ParamsBlock extends Displayable {
   __className = 'displayable-struct column'
@@ -189,8 +189,10 @@ export class TexGen extends Script {
     
   }
 
+  sprites = null
+
   onStart() {
-    this.svg = Image.fromSvg(sampleImage, 256)
+    this.sprites = Images.sprites.map(x=>Image.fromSvg(x, 256))
 
     this.fb.allocate(this.res,this.res)
     st.SetCircleResolution(30)

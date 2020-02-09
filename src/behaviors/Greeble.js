@@ -1,5 +1,5 @@
 import Sprites from './Sprites.js'
-import API from '../../core/API.js'
+import API from '../core/API.js'
 let st = API
 class Rect {
   x = 0
@@ -60,7 +60,7 @@ class Greeble {
       st.SetColor(app.getColorFromIntensity(g.depth * 255));
       let r = g.get();
       if (spriteChance > randFunc(1.0)) {
-        Sprites.drawRandom(r.x, r.y, r.w, r.h);
+        Sprites.drawRandom(r.x, r.y, r.w, r.h, randFunc);
       } else {
         st.DrawRectangle(r.x, r.y, r.w, r.h);
       }

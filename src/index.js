@@ -4,7 +4,7 @@ import React from "react"
 import ReactDOM from "react-dom"
 import App from './core/App.js'
 import { AppComponent } from './components/AppComponent.jsx'
-import { TexGen } from './behaviors/obsolete/TexGen.js'
+import { TexGen } from './behaviors/TexGen.js'
 import './style.scss'
 
 const renderApp = true

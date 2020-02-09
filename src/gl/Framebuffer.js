@@ -92,7 +92,7 @@ class Framebuffer extends Image {
     var img = new Image()
     img.src = canvas.toDataURL()
     this.img = img
-    canvas.outerHTML = "";
+    canvas.remove()
   }
 }
 
