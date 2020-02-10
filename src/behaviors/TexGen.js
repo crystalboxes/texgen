@@ -229,14 +229,14 @@ export class TexGen extends Script {
         }
       },
       {
-        e: this.randomGridParams, fn: function () {
+        effectParameters: this.randomGridParams, executionFunction: function () {
           if (that.main.toggles.randomGrid) {
             Grids.drawRandomGrid(that.randomGridParams, that)
           }
         }
       },
       {
-        e: this.kdGridParams, fn: function () {
+        effectParameters: this.kdGridParams, executionFunction: function () {
           if (that.main.toggles.kd) {
             KdGrid.draw(that.kdGridParams, that)
           }
