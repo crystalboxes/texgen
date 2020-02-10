@@ -13,7 +13,7 @@ export class DisplayableComponent extends Component {
       this.title = props.title
     }
   }
-  
+
   get owner() {
     return this.props.owner
   }
@@ -22,10 +22,10 @@ export class DisplayableComponent extends Component {
     let entries = []
     entries = Object.entries(this.owner).filter(x => !x[0].startsWith('_'))
       .filter(x => {
-        if ('_params' in this.owner && Array.isArray(this.owner._params)) {
-          return this.owner._params.includes(x[0])
-        } else if ('_excludeParamNames' in this.owner && Array.isArray(this.owner._excludeParamNames)) {
-          return !this.owner._excludeParamNames.includes(x[0])
+        if ('__includeParams' in this.owner && Array.isArray(this.owner.__includeParams)) {
+          return this.owner.__includeParams.includes(x[0])
+        } else if ('__excludeParams' in this.owner && Array.isArray(this.owner.__excludeParams)) {
+          return !this.owner.__excludeParams.includes(x[0])
         } else {
           return true
         }
@@ -57,18 +57,29 @@ export class DisplayableComponent extends Component {
           }
         }
 
-        if (valueType === 'object') {
-          if ('value' in val) {
-            // It's a field with additional attributes required to pass to the component
-            object = val
-            displayName = 'displayName' in object ? object.displayName : displayName
-            valueType = typeof val.value
-            val = val.value
-          } else {
-            if (!isDisplayable(val)) {
-              return null
-            }
+        if ('__paramsConfig' in this.owner && displayName in this.owner.__paramsConfig) {
+          var e = Object.entries(this.owner.__paramsConfig[displayName])
+          e.push(['value', val])
+          return {
+            name: displayName,
+            valueType: typeof val,
+            value: val,
+            data: Object.fromEntries(e)
           }
+        }
+
+        if (valueType === 'object') {
+          // It's a field with additional attributes required to pass to the component
+          // if ('value' in val) {
+          //   object = val
+          //   displayName = 'displayName' in object ? object.displayName : displayName
+          //   valueType = typeof val.value
+          //   val = val.value
+          // } else {
+          if (!isDisplayable(val)) {
+            return null
+          }
+          // }
         }
         return { name: displayName, valueType: valueType, value: val, data: object }
       }).filter(x => x !== null)
@@ -144,7 +155,7 @@ export class DisplayableComponent extends Component {
     let isCollapsable = false
     let collapsed = false
     let cType = typeof this.owner.__collapsable
-    if(cType === 'boolean') {
+    if (cType === 'boolean') {
       isCollapsable = this.owner.__collapsable
     } else if (cType === 'object') {
       collapsed = this.owner.__collapsable.collapsed

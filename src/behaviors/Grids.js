@@ -15,8 +15,8 @@ function getIrregular(minMaxDepth, minMaxSize, minScale, maxScale) {
   g.center.y = rgRand.range(0, st.GetHeight());
 
   let size = rgRand.range(minMaxSize.x, minMaxSize.y) * 0.001;
-  g.scale.x = rgRand.range(minScale.x, maxScale.x.value) * size;
-  g.scale.y = rgRand.range(minScale.y, maxScale.y.value) * size;
+  g.scale.x = rgRand.range(minScale.x, maxScale.x) * size;
+  g.scale.y = rgRand.range(minScale.y, maxScale.y) * size;
   g.size = st.GetWidth();
   g.depth = rgRand.range(minMaxDepth.x, minMaxDepth.y);
   return g;
@@ -25,7 +25,7 @@ function getIrregular(minMaxDepth, minMaxSize, minScale, maxScale) {
 class Grids {
   static drawRandomGrid(p, app) {
     rgRand.init(p.seed);
-    for (let x = 0; x < p.greebleCount.value * p.scaleCount; x++) {
+    for (let x = 0; x < p.greebleCount * p.scaleCount; x++) {
       getIrregular(
         vec2(p.minDepth, p.maxDepth),
         vec2(p.minSize, p.maxSize), vec2(p.minScaleX, p.minScaleY),

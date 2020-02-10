@@ -46,23 +46,30 @@ export class Color extends Displayable {
       b = r
     }
     let c = new Color
-    c.red = { value: r | 0, rangeMin: 0, rangeMax: 255, step: 1 }
-    c.green = { value: g | 0, rangeMin: 0, rangeMax: 255, step: 1 }
-    c.blue = { value: b | 0, rangeMin: 0, rangeMax: 255, step: 1 }
+    c.red = r | 0
+    c.green = g | 0
+    c.blue = b | 0
+
     if (a) {
       c.alpha = a
     }
     return c
   }
 
-  get r() { return this.red.value }
-  get g() { return this.green.value }
-  get b() { return this.blue.value }
+  __paramsConfig = {
+    red: { rangeMin: 0, rangeMax: 255, step: 1 },
+    green: { rangeMin: 0, rangeMax: 255, step: 1 },
+    blue: { rangeMin: 0, rangeMax: 255, step: 1 }
+  }
+
+  get r() { return this.red }
+  get g() { return this.green }
+  get b() { return this.blue }
   get a() { return 'alpha' in this ? this.alpha : 1.0 }
 
-  set r(value) { this.red.value = value }
-  set g(value) { this.green.value = value }
-  set b(value) { this.blue.value = value }
+  set r(value) { this.red = value }
+  set g(value) { this.green = value }
+  set b(value) { this.blue = value }
   set a(value) {
     if (!('alpha' in this)) {
       return;
@@ -84,7 +91,7 @@ export class Color extends Displayable {
   }
 
   __displayable = ColorComponent
-  _params = ['red', 'green', 'blue', 'alpha']
+  __includeParams = ['red', 'green', 'blue', 'alpha']
 }
 
 export default Color

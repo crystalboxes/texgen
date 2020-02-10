@@ -22,6 +22,7 @@ export class ParamsBlock extends Displayable {
 }
 
 export class GridEffect extends ParamsBlock {
+  zPriority = 2
   seed = 0
   xCount = 8
   yCount = 8
@@ -31,17 +32,21 @@ export class GridEffect extends ParamsBlock {
   minDepth = 0.0
   maxDepth = 1.0
 
-  __displayTitle = 'Grid Effect'
+  __paramsConfig = {
+    zPriority: { rangeMin: 0, rangeMax: 5, step: 1 }
+  }
 
+  __displayTitle = 'Grid Effect'
 }
 
 export class KdGridEffect extends ParamsBlock {
+  zPriority = 0
   optimize = false
   quadSplitFactor = 1.0
   seed = 0
   spriteChance = 0.0
-  iterations = { value: 5, rangeMin: 1, rangeMax: 12, step: 1 }
-  splitRange = { value: 0.05, rangeMin: 0.04, rangeMax: 0.5 }
+  iterations = 5
+  splitRange = 0.05
   renderChance = 1.0
   kdSplitChance = 1.0
   splitChance = 1.0
@@ -56,12 +61,17 @@ export class KdGridEffect extends ParamsBlock {
   maxDepth = 1.0
 
   __displayTitle = 'k-d Grid'
-
+  __paramsConfig = {
+    zPriority: { rangeMin: 0, rangeMax: 5, step: 1 },
+    iterations: { rangeMin: 1, rangeMax: 12, step: 1 },
+    splitRange: { rangeMin: 0.04, rangeMax: 0.5 }
+  }
 }
 
 export class RandomGridEffect extends ParamsBlock {
-  seed = { value: 1000, rangeMin: 123, rangeMax: 9999 }
-  greebleCount = { value: 500, rangeMin: 1, rangeMax: 10000 }
+  zPriority = 1
+  seed = 1000
+  greebleCount = 500
   scaleCount = 1.0
   spriteChance = 0.5
   minDepth = 0
@@ -70,11 +80,17 @@ export class RandomGridEffect extends ParamsBlock {
   maxSize = 200
   minScaleX = 0.1
   minScaleY = 0.1
-  maxScaleX = { value: 1.5, rangeMax: 10.0, step: 0.1 }
-  maxScaleY = { value: 1.5, rangeMax: 10.0, step: 0.1 }
+  maxScaleX = 1.5
+  maxScaleY = 1.5
 
   __displayTitle = 'Random Grid'
-
+  __paramsConfig = {
+    zPriority: { rangeMin: 0, rangeMax: 5, step: 1 },
+    maxScaleX: { rangeMax: 10.0, step: 0.1 },
+    maxScaleY: { rangeMax: 10.0, step: 0.1 },
+    seed: { rangeMin: 123, rangeMax: 9999 },
+    greebleCount: { rangeMin: 1, rangeMax: 10000 }
+  }
 }
 
 export class Colorizer extends Displayable {
@@ -105,12 +121,15 @@ function getResolutionLabel(val) {
 
 export class MainParams extends ParamsBlock {
   resolutionLabel = new Label(getResolutionLabel(11))
-  size = { value: 11, rangeMin: 1, rangeMax: 13, step: 1 }
+  size = 11
   render = new Button
   toggles = new Toggles
   colorize = new Colorizer
 
   __collapsable = false
+  __paramsConfig = {
+    size: { rangeMin: 1, rangeMax: 13, step: 1 }
+  }
 }
 
 let instance = null
@@ -142,7 +161,9 @@ export class TexGen extends Script {
     pos: { x: 10, y: 10 }
   }
 
-  _needsToDraw = true
+  needsToDraw = true
+  sprites = null
+  __includeParams = ['main', 'effects']
 
   get colorizer() {
     return this.main.colorize
@@ -179,26 +200,49 @@ export class TexGen extends Script {
   }
 
   get res() {
-    return getResolution(this.main.size.value)
+    return getResolution(this.main.size)
   }
 
   render() {
     console.log('rendering')
     this.fb.dumpImage()
     FileSaver.saveAs(this.fb.img.src, 'img.png')
-    
+
   }
 
-  sprites = null
 
   onStart() {
-    this.sprites = Images.sprites.map(x=>Image.fromSvg(x, 256))
+    this.sprites = Images.sprites.map(x => Image.fromSvg(x, 256))
 
-    this.fb.allocate(this.res,this.res)
+    this.fb.allocate(this.res, this.res)
     st.SetCircleResolution(30)
     instance = this
 
     this.main.render.onClick = this.render.bind(this)
+    let that = this
+    this.effectCallbacks = [
+      {
+        effectParameters: this.regularGridParams, executionFunction: function () {
+          if (that.main.toggles.grid) {
+            Grids.drawRegularGrid(that.regularGridParams, that)
+          }
+        }
+      },
+      {
+        e: this.randomGridParams, fn: function () {
+          if (that.main.toggles.randomGrid) {
+            Grids.drawRandomGrid(that.randomGridParams, that)
+          }
+        }
+      },
+      {
+        e: this.kdGridParams, fn: function () {
+          if (that.main.toggles.kd) {
+            KdGrid.draw(that.kdGridParams, that)
+          }
+        }
+      }
+    ]
   }
 
   static get app() {
@@ -206,45 +250,36 @@ export class TexGen extends Script {
   }
 
   onUpdate() {
-    if (!this._needsToDraw) {
+    if (!this.needsToDraw) {
       return
     }
-    this._needsToDraw = false
+    this.needsToDraw = false
 
     this.fb.begin()
-    Graphics.clearColor(255,255,255, 0)
-    // st.SetColor(128)
-    // st.DrawRectangle(0, 0, st.GetWidth(), st.GetHeight())
-    if (this.main.toggles.grid) {
-      Grids.drawRegularGrid(this.regularGridParams, this)
-    }
-
-    if (this.main.toggles.randomGrid) {
-      Grids.drawRandomGrid(this.randomGridParams, this)
-    }
-
-    if (this.main.toggles.kd) {
-      KdGrid.draw(this.kdGridParams, this)
+    Graphics.clearColor(255, 255, 255, 0)
+    this.effectCallbacks.sort((a,b) => b.effectParameters.zPriority - a.effectParameters.zPriority)
+    for(let effect of this.effectCallbacks) {
+      effect.executionFunction()
     }
 
     this.fb.end()
     this.fb.draw(0, 0, Graphics.width, Graphics.height)
   }
-  
+
   onValidate(val) {
-    this._needsToDraw = true;
-    let res = getResolution(this.main.size.value)
+    this.needsToDraw = true;
+    let res = getResolution(this.main.size)
     if (res != this.fb.width) {
       this.fb.allocate(res, res)
     }
-    this.main.resolutionLabel.text = getResolutionLabel(this.main.size.value)
+    this.main.resolutionLabel.text = getResolutionLabel(this.main.size)
   }
 
   onDestroy() {
   }
 
   onResize(width, height) {
-    this._needsToDraw = true;
+    this.needsToDraw = true;
   }
 
 }

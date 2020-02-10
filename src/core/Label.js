@@ -18,7 +18,7 @@ class Label extends Displayable {
     Events.invoke(Events.Type.LabelChanged, {value: value}, this)
   }
   __displayable = LabelComponent
-  _params = []
+  __includeParams = []
 
 }
 

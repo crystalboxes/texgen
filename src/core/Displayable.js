@@ -9,5 +9,6 @@ export class Displayable {
   __collapsable = false
   __className = 'displayable-struct'
   __displayTitle = ''
+  __paramsConfig = {}
 }
 export default Displayable

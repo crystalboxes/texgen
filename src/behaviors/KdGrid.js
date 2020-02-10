@@ -28,7 +28,7 @@ function splitRect(r, seed) {
   }
 
   let rnd2 = function (a0, b0, off) {
-    let m = (b0 - a0) * app.kdGridParams.splitRange.value;
+    let m = (b0 - a0) * app.kdGridParams.splitRange
     a0 += m;
     b0 -= m;
 
@@ -115,7 +115,7 @@ class KdGrid {
     let rects = [{ x: 0, y: 0, w: st.GetWidth(), h: st.GetHeight() },]
 
     // use first and second
-    for (let x = 0; x < app.kdGridParams.iterations.value; x++) {
+    for (let x = 0; x < app.kdGridParams.iterations; x++) {
       rects = kd.split(rects, x);
     }
 
