@@ -61,9 +61,9 @@ export class KdGridEffect extends ParamsBlock {
 
 export class RandomGridEffect extends ParamsBlock {
   seed = { value: 1000, rangeMin: 123, rangeMax: 9999 }
-  greebleCount = { value: 100, rangeMin: 1, rangeMax: 10000 }
+  greebleCount = { value: 500, rangeMin: 1, rangeMax: 10000 }
   scaleCount = 1.0
-  spriteChance = 0.0
+  spriteChance = 0.5
   minDepth = 0
   maxDepth = 1.0
   minSize = 20
@@ -89,8 +89,8 @@ export class Colorizer extends Displayable {
 }
 
 export class Toggles extends ParamsBlock {
-  kd = true
-  randomGrid = false
+  kd = false
+  randomGrid = true
   grid = false
   __collapsable = false
 }
@@ -212,8 +212,9 @@ export class TexGen extends Script {
     this._needsToDraw = false
 
     this.fb.begin()
-    st.SetColor(128)
-    st.DrawRectangle(0, 0, st.GetWidth(), st.GetHeight())
+    Graphics.clearColor(255,255,255, 0)
+    // st.SetColor(128)
+    // st.DrawRectangle(0, 0, st.GetWidth(), st.GetHeight())
     if (this.main.toggles.grid) {
       Grids.drawRegularGrid(this.regularGridParams, this)
     }

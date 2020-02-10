@@ -39,6 +39,7 @@ export class CanvasComponent extends Component {
       width={this.state.width}
       height={this.state.height}
       style={{
+        background: 'rgba(0,0,0,0)',
         width: CanvasComponent.getRenderSize(this.state.width) + 'px',
         height: CanvasComponent.getRenderSize(this.state.height) + 'px'
       }}></canvas>

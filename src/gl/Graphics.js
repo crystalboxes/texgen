@@ -98,8 +98,9 @@ class Graphics {
     // Enable transparency
     // TODO move to a separate function (if it's necessary)
     gl.enable(gl.BLEND)
-    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA)
+    // gl.colorMask(false, false, false, true);
 
+    gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
     gl.disable(gl.DEPTH_TEST)
   }
 
