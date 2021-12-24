@@ -19,13 +19,13 @@ class SolidShape {
     this.updateCircle()
   }
 
-  init() {
+ async init() {
     let gl = Graphics.gl
-    this.solidShader = Graphics.createShader(
+    this.solidShader = await Graphics.createShader(
       'solid.vert.glsl', 'solid.frag.glsl')
-    this.imageShader = Graphics.createShader(
+    this.imageShader = await Graphics.createShader(
       'image.vert.glsl', 'image.frag.glsl')
-    this.imageFlipUv = Graphics.createShader(
+    this.imageFlipUv = await Graphics.createShader(
       'image-uvflip.vert.glsl', 'image.frag.glsl')
 
     let program = this.solidShader.program

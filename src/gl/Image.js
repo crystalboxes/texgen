@@ -10,6 +10,7 @@ class Image {
   }
 
   static fromSvg(svg, targetWidth) {
+    console.log({svg})
     let img = new Image
 
     let resize = targetWidth != null

@@ -14,8 +14,8 @@ class App {
     // since the DOM is generated on React's 'render' call constructor will do nothing
   }
 
-  onApplicationStart() {
-    Graphics.init(document.getElementById('app-display'))
+ async onApplicationStart() {
+   await Graphics.init(document.getElementById('app-display'))
     // initialize gl context here
     this.script.time = this.time
 

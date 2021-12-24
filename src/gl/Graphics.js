@@ -17,7 +17,7 @@ class State {
 let state = new State
 
 class Graphics {
-  static init(canvas) {
+  static async init(canvas) {
     gl = canvas.getContext('webgl')
     if (!gl) {
       console.error("The browser doesn't support webgl, quitting...")
@@ -31,7 +31,7 @@ class Graphics {
     canvas.style.height = canvas.height / window.devicePixelRatio + 'px'
 
     Graphics.setViewport()
-    rect.init()
+   await rect.init()
   }
 
   static get width() {
@@ -108,13 +108,16 @@ class Graphics {
   }
 
 
-  static createShader(vtxSrc, fragSrc, errorCallback) {
+  static async createShader(vtxSrc, fragSrc, errorCallback) {
     if (!errorCallback) {
       errorCallback = err
     }
-    let getGlShader = function (shaderSource, shaderType) {
+    let getGlShader = async (shaderSource, shaderType) => {
       if (shaderSource.endsWith('.glsl')) {
-        shaderSource = require('./shaders/' + shaderSource)
+        
+        shaderSource = (await import(/* @vite-ignore */ './shaders/' + shaderSource)).default
+
+        console.log({shaderSource})
       }
 
       const shader = gl.createShader(shaderType);
@@ -128,8 +131,8 @@ class Graphics {
       return shader
     }
     let program = gl.createProgram()
-    gl.attachShader(program, getGlShader(vtxSrc, gl.VERTEX_SHADER))
-    gl.attachShader(program, getGlShader(fragSrc, gl.FRAGMENT_SHADER))
+    gl.attachShader(program,await  getGlShader(vtxSrc, gl.VERTEX_SHADER))
+    gl.attachShader(program, await getGlShader(fragSrc, gl.FRAGMENT_SHADER))
     gl.linkProgram(program)
     if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
       errorCallback(`Link error: ${gl.getProgramInfoLog(program)}`)
