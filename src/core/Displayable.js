@@ -1,11 +1,11 @@
-import {DisplayableComponent} from '../components/DisplayableComponent.jsx'
+import { DisplayableComponent } from "../components/DisplayableComponent.jsx";
 
 export class Displayable {
   get className() {
-    return this._className
+    return this._className;
   }
 
-  _displayable = DisplayableComponent
-  _className = 'displayable-struct'
+  _displayable = DisplayableComponent;
+  _className = "displayable-struct";
 }
-export default Displayable
+export default Displayable;

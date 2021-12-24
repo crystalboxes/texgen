@@ -8,20 +8,22 @@ $br: lightness($main-color);
 $parameters-brightness: lightness(rgb(75, 75, 75));
 
 body {
-  background-color: hsla($hue, $sat, $br, 1.0);
+  background-color: hsla($hue, $sat, $br, 1);
   font-size: 10px;
-  font-family: 'Roboto Condensed', sans-serif;
+  font-family: "Roboto Condensed", sans-serif;
   letter-spacing: 0.45pt;
 }
 
-body, p, h3 {
-  padding:0;
+body,
+p,
+h3 {
+  padding: 0;
   margin: 0;
   color: white;
 }
 
 input[type="checkbox"] {
-  padding:0;
+  padding: 0;
   margin: 0 2px 0 0;
   vertical-align: middle;
 }
@@ -41,30 +43,30 @@ strong.cursor {
 
 .collapse-button {
   background: none;
-	color: inherit;
-	border: none;
-	padding: 0;
-	font: inherit;
-	/* cursor: pointer; */
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  /* cursor: pointer; */
   outline: inherit;
   vertical-align: middle;
-  
+
   font-family: monospace;
 }
 
 .script-parameters {
   background-color: hsla($hue + $hue * 0.08, $sat * 0.44, $parameters-brightness, 0.6) !important;
-  left:0;
+  left: 0;
   min-width: 500px;
   padding: 0 0 2px 2px;
   position: fixed;
-  top:0;
+  top: 0;
 }
 .script-parameters > .paramsContainer {
   position: relative;
 }
 
-.column { 
+.column {
   float: left;
   padding-bottom: 10px;
   padding-right: 8px;
@@ -78,11 +80,11 @@ strong.cursor {
 
 .noselect {
   -webkit-touch-callout: none; /* iOS Safari */
-    -webkit-user-select: none; /* Safari */
-     -khtml-user-select: none; /* Konqueror HTML */
-       -moz-user-select: none; /* Old versions of Firefox */
-        -ms-user-select: none; /* Internet Explorer/Edge */
-            user-select: none; /* Non-prefixed version, currently
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Old versions of Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
+  user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome, Opera and Firefox */
 }
 

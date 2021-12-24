@@ -1,8 +1,7 @@
-
 class Shader {
   constructor(program) {
-    this.program = program
+    this.program = program;
   }
 }
 
-export default Shader
+export default Shader;
